@@ -2,10 +2,13 @@
 
 namespace Controllers;
 
-class HomeController
+use Models\ReparationsModel;
+
+class HomeController extends Controller
 {
     public function index()
     {
-        echo "Page d'acceuil";
+        $reparations = new ReparationsModel();
+        echo $this->renderApi($reparations->getAllData());
     }
 }

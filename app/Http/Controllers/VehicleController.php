@@ -2,10 +2,10 @@
 
 namespace Controllers;
 
-class VehicleController
+class VehicleController extends Controller
 {
     public function index()
     {
-        echo "Page de véhicule";
+        $this->view("VehicleView");
     }
 }

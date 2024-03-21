@@ -5,7 +5,8 @@
         "psr-4": {
             "Router\\": "router/",
             "Request\\": "app/Http/Request/",
-            "Controllers\\": "app/Http/Controllers/"
+            "Controllers\\": "app/Http/Controllers/",
+            "Models\\": "app/Models"
         }
     },
     "authors": [
@@ -14,5 +15,7 @@
             "email": "gregory.wolff.dev@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "vlucas/phpdotenv": "^5.6"
+    }
 }
