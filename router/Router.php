@@ -36,9 +36,12 @@ class Router
         $this->setRoute($this->request->getUri(), $this->request->getParams() ?? null);
     }
 
-    public function post(string $route, array $controller, array $datas = [])
+    public function post(string $path, array $action)
     {
-        
+        if ($this->request->getMethod() == 'POST' && $this->request->getPost()) {
+            $this->routes[$path] = $action;
+            $this->setRoute($this->request->getUri(), $this->request->getPost());
+        }
     }
 
     public function put(string $route, array $controller, array $params = [])

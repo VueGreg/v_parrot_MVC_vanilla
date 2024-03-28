@@ -1,21 +1,10 @@
 {
-    "name": "sharr/parrot-poo",
-    "description": "A MVC model POO project",
-    "autoload": {
-        "psr-4": {
-            "Router\\": "router/",
-            "Request\\": "app/Http/Request/",
-            "Controllers\\": "app/Http/Controllers/",
-            "Models\\": "app/Models"
-        }
-    },
-    "authors": [
-        {
-            "name": "Grégory WOLFF",
-            "email": "gregory.wolff.dev@gmail.com"
-        }
-    ],
+    "prefer-stable": true,
     "require": {
-        "vlucas/phpdotenv": "^5.6"
+        "vlucas/phpdotenv": "^4.2.0"
+    },
+    "config": {
+        "sort-packages": true,
+        "optimize-autoloader": true
     }
 }

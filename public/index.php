@@ -6,6 +6,6 @@ use Router\Router;
 
 $router = new Router();
 
-$router->get('/', ["Controllers\VehicleController", "index"]);
+$router->get('/', ["Controllers\HomeController", "index"]);
 
-$router->get('/home', ["Controllers\HomeController", 'index']);
+$router->get('/about', ["Controllers\AboutController", 'index']);

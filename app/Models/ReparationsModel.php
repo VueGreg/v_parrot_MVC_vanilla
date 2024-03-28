@@ -6,6 +6,11 @@ class ReparationsModel extends Model
 {
     public function getAllData(): array
     {
-        return $this->all();
+        return self::all();
+    }
+
+    public function getCategories(): array
+    {
+        return self::distinct("categorie");
     }
 }
