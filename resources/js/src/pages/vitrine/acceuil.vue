@@ -1,16 +1,24 @@
 <script setup>
 
     import LayoutView from '../../Layout/LayoutView.vue';
+    import { onMounted } from 'vue';
+    import { useStore } from 'vuex';
 
     defineProps({
         data: Object
     })
 
+    const store = useStore();
+
+    onMounted(() => {
+        console.log(store.state.layoutData)
+    });
+
 </script>
 
 <template>
 
-        <LayoutView :data="data">
+        <LayoutView>
             <template #content>
                 <div>
                     <h2>Ceci est la page d'acceuil</h2>

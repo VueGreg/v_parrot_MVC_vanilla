@@ -6,9 +6,11 @@
     import AppBarComponent from '../components/AppBarComponent.vue'
     import FooterComponent from '../components/FooterComponent.vue';
 
-    defineProps({
-        data: Object
-    })
+    import { useStore } from 'vuex';
+    import { computed } from 'vue';
+
+    const store = useStore();
+    const data = computed(() => store.getters.layoutData);
 
 </script>
 

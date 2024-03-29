@@ -21,6 +21,7 @@
             $filename = $vue_info['filename'];
             echo "<script>var filename = '{$filename}';</script>";
         ?>
+        <script src="https://kit.fontawesome.com/a0d5f723cd.js" crossorigin="anonymous"></script>
     </body>
 
 </html>

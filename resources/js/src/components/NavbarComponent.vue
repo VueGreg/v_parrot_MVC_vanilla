@@ -1,22 +1,24 @@
 <script setup>
 
+    import LinkPOO from './LinkPOO.vue';
+
 </script>
 
 
 <template>
     <nav class="navbar navbar-expand-lg navbar-expand-sm navbar-dark nav__navigate">
     <div class="container-fluid">
-            <RouterLink class="nav__navigate-link" :class="{'active': path == '/'}" to="/">Acceuil</RouterLink>
-            <RouterLink class="nav__navigate-link" :class="{'active': path == '/reparations'}" to="/reparations">Reparation</RouterLink>
-            <RouterLink class="nav__navigate-link" :class="{'active': path == '/annonces'}" to="/annonces">Véhicules d'occasion</RouterLink>
+            <LinkPOO class="nav__navigate-link" :class="{'active': path == '/'}" to="/">Acceuil</LinkPOO>
+            <LinkPOO class="nav__navigate-link" :class="{'active': path == '/reparations'}" to="/reparations">Reparation</LinkPOO>
+            <LinkPOO class="nav__navigate-link" :class="{'active': path == '/annonces'}" to="/annonces">Véhicules d'occasion</LinkPOO>
         <button class="nav__navigate-btn navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
-            <RouterLink class="nav__navigate-link" active-class="active" to="/contact/0">Contact</RouterLink>
-            <RouterLink class="nav__navigate-link" to="/dashboard/messages" v-if="isConnect">Tableau de bord</RouterLink>
-        </div>
+            <div class="navbar-nav">
+                <LinkPOO class="nav__navigate-link" active-class="active" to="/contact/0">Contact</LinkPOO>
+                <LinkPOO class="nav__navigate-link" to="/dashboard/messages" v-if="isConnect">Tableau de bord</LinkPOO>
+            </div>
         </div>
     </div>
 </nav>

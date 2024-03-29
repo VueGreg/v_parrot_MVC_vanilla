@@ -17,11 +17,6 @@ class HomeController extends Controller
         $images = new ImagesModel();
         $json['images'] =  $images->getAllData();
 
-        $reparations = new ReparationsModel();
-        $json['reparations'] = $reparations->getAllData();
-        $json['categorie_reparations'] = $reparations->getCategories();
-
-        
         $horaires = new HorairesModel();
         $changeHoraire = $horaires->getAllData();
         $newHoraires = new ChangeHoraireFormat();

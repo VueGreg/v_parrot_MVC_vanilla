@@ -1,16 +1,18 @@
 <script setup>
 
+    import LinkPOO from './LinkPOO.vue';
+
 </script>
 
 <template>
 
     <header>
-        <a to="/" style="text-decoration: none;">
+        <LinkPOO to="/" style="text-decoration: none;">
             <div class="logo">
                 <img class="logo__image" src="https://gregory-wolff.com/images/wepik-geometric-gradient-brandname-logo-20230927155932MPVN.png" alt="Logo de l'entreprise Vincent PARROT">
                 <p class="logo__text">GARAGE V.PARROT</p>
             </div>
-        </a>
+        </LinkPOO>
 
         <div class="button">
             <!--Call btn-->
@@ -134,4 +136,4 @@
             width: 45vw;
         }
     }
-</style>
+</style>./LinkPOO.vue
