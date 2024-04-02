@@ -8,15 +8,15 @@
 <template>
     <nav class="navbar navbar-expand-lg navbar-expand-sm navbar-dark nav__navigate">
     <div class="container-fluid">
-            <LinkPOO class="nav__navigate-link" :class="{'active': path == '/'}" to="/">Acceuil</LinkPOO>
-            <LinkPOO class="nav__navigate-link" :class="{'active': path == '/reparations'}" to="/reparations">Reparation</LinkPOO>
-            <LinkPOO class="nav__navigate-link" :class="{'active': path == '/annonces'}" to="/annonces">Véhicules d'occasion</LinkPOO>
+            <LinkPOO class="nav__navigate-link" activeClass="active" to="/">Acceuil</LinkPOO>
+            <LinkPOO class="nav__navigate-link" activeClass="active" to="/reparations">Reparation</LinkPOO>
+            <LinkPOO class="nav__navigate-link" activeClass="active" to="/annonces">Véhicules d'occasion</LinkPOO>
         <button class="nav__navigate-btn navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <LinkPOO class="nav__navigate-link" active-class="active" to="/contact/0">Contact</LinkPOO>
+                <LinkPOO class="nav__navigate-link" activeClass="active" to="/contact/0">Contact</LinkPOO>
                 <LinkPOO class="nav__navigate-link" to="/dashboard/messages" v-if="isConnect">Tableau de bord</LinkPOO>
             </div>
         </div>
@@ -40,23 +40,6 @@
         padding-left: 2em;
     }
 
-    .active {
-
-        color: $dark-grey;
-
-        &:focus{
-                color: $dark-grey;
-            }
-
-        &:focus::before{
-            content: '';
-                position: absolute;
-                width: 110%;
-                height: 90%;
-                border-bottom: 5px solid rgb(255, 255, 255);
-                animation: animate 0.2s linear;
-        }
-    }
     .nav__navigate{
         background-color: $primary-color;
         height: 6vh;
@@ -87,6 +70,25 @@
         &-btn{
             background-color: $primary-color;
             border: none;
+        }
+    }
+
+    .active {
+
+        color: $dark-grey;
+
+        &:focus{
+                color: $dark-grey;
+            }
+
+        &:focus::before,
+        &::before {
+            content: '';
+                position: absolute;
+                width: 110%;
+                height: 90%;
+                border-bottom: 5px solid rgb(255, 255, 255);
+                animation: animate 0.2s linear;
         }
     }
 

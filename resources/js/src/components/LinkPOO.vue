@@ -8,6 +8,13 @@
     params: {
             type: Object,
             default: () => ({})
+        },
+    activeClass: {
+            type: String,
+        },
+    hrefUrl: {
+            type: String,
+            default: window.location.pathname
         }
     });
 
@@ -22,14 +29,10 @@
         return href;
     };
 
-    const send = () => {
-        window.location.href = to();
-    };
-
 </script>
 
 <template>
-    <a :href="to" @click.prevent="send()">
+        <a :href="to()" :class="props.to === props.hrefUrl ? props.activeClass : '', $attrs.class">
       <slot></slot>
     </a>
-  </template>
+</template>
