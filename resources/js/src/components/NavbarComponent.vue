@@ -16,7 +16,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <LinkPOO class="nav__navigate-link" activeClass="active" to="/contact/0">Contact</LinkPOO>
+                <LinkPOO class="nav__navigate-link" activeClass="active" to="/contact">Contact</LinkPOO>
                 <LinkPOO class="nav__navigate-link" to="/dashboard/messages" v-if="isConnect">Tableau de bord</LinkPOO>
             </div>
         </div>

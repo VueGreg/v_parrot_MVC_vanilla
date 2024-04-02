@@ -15,21 +15,21 @@ class HomeController extends Controller
     public function index()
     {
         $images = new ImagesModel();
-        $json['images'] =  $images::all();
+        $json['images'] =  $images->all();
 
         $horaires = new HorairesModel();
-        $changeHoraire = $horaires::all();
+        $changeHoraire = $horaires->all();
         $newHoraires = new ChangeHoraireFormat();
         $json['horaires'] = $newHoraires->changeHoraire($changeHoraire);
 
         $entreprise = new EntrepriseModel();
-        $json['informations'] = $entreprise::all();
+        $json['informations'] = $entreprise->all();
 
         $temoignages = new TemoignagesModel();
-        $json['temoignages'] = $temoignages::all();
+        $json['temoignages'] = $temoignages->all();
 
         $annonces = new AnnoncesModel();
-        $json['nombre_vehicules'] = $this->countData($annonces::where("status = 0"));
+        $json['nombre_vehicules'] = $this->countData($annonces->where("status = 0"));
 
         $this->view('vitrine/acceuil', $json);
     }
