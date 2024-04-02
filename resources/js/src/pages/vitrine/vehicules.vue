@@ -18,8 +18,66 @@
 
             <h1 class="col-10 col-sm-8 col-md-6">{{ data.count }}</h1>
 
+            <form>
+                <div class="offcanvas__row">
+                        <div class="offcanvas__selectdiv">
+                            <select class="offcanvas__select" v-model="marque" name="marque" id="marque">
+                                <option value="0" disabled selected>Marque</option>
+                                <option v-for="marque in data.marqueDispo" :value="marque">{{ marque.marque }}</option>
+                            </select>
+                        </div>
+                        <div class="offcanvas__selectdiv">
+                            <select class="offcanvas__select" v-model="modele" name="modele" id="modele">
+                                <option value="0" disabled selected>Modèle</option>
+                                <option v-for="modele in modeles" :value="modele">{{ modele }}</option>
+                            </select>
+                        </div>
+                        <div class="offcanvas__selectdiv">
+                            <select class="offcanvas__select" v-model="energie" name="energie" id="energie">
+                                <option value="0" disabled selected>Energie</option>
+                                <option v-for="energie in energies" :value="energie">{{ energie }}</option>
+                            </select>
+                        </div>
+                </div>
+                <div class="offcanvas__row">
+                        <section class="range-slider">
+                            <h6>Prix</h6>
+                            <label for="priceMini" class="output outputOne outputPriceMini">{{ prixMin }}€</label>
+                            <label for="priceMaxi" class="output outputTwo outputPriceMaxi">{{ prixMax }}€</label>
+                            <span class="full-range"></span>
+                            <span class="incl-range"></span>
+                            <input id="priceMini" name="priceMini" :min="prixMinRequest" :max="prixMaxRequest" step="100" type="range" v-model="prixMin">
+                            <input id="priceMaxi" name="priceMaxi" :min="prixMinRequest" :max="prixMaxRequest" step="100" type="range" v-model="prixMax">
+                        </section>
+
+                        <section class="range-slider">
+                            <h6>Kilométrage</h6>
+                            <label for="kilometerMin" class="output outputOne outputKilometerMin">{{ kilometerMin }}km</label>
+                            <label for="kilometerMax" class="output outputTwo outputKilometerMax">{{ kilometerMax }}km</label>
+                            <span class="full-range"></span>
+                            <span class="incl-range"></span>
+                            <input id="kilometerMin" name="kilometerMin" :min="kilometerMinRequest" :max="kilometerMaxRequest" step="1000" type="range" v-model="kilometerMin">
+                            <input id="kilometerMax" name="kilometerMax" :min="kilometerMinRequest" :max="kilometerMaxRequest" step="1000" type="range" v-model="kilometerMax">
+                        </section>
+
+                        <section class="range-slider">
+                            <h6>Année</h6>
+                            <label for="yearMin" class="output outputOne outputYearMin">{{ yearMin }}</label>
+                            <label for="yearMax" class="output outputTwo outputYearMax">{{ yearMax }}</label>
+                            <span class="full-range"></span>
+                            <span class="incl-range"></span>
+                            <input id="yearMin" name="yearMin" :min="yearMinRequest" :max="yearMaxRequest" step="1" type="range" v-model="yearMin">
+                            <input id="yearMax" name="yearMax" :min="yearMinRequest" :max="yearMaxRequest" step="1" type="range" v-model="yearMax">
+                        </section>
+                    </div>
+                    <div class="offcanvas__btn">
+                        <button @click.prevent="initialize()">Reinitialiser</button>
+                        <button data-bs-dismiss="offcanvas" @click.prevent="searchCars()">Rechercher</button>
+                    </div>
+            </form>
+
             <div class="container__cards col-9 col-sm-6 col-lg-8">
-                <div class="cards" v-for="annonce in data" :key="annonce.numero_annonce">
+                <div class="cards" v-for="annonce in data.annonces" :key="annonce.numero_annonce">
                     <LinkPOO class="link" :to="`/dashboard/vehicule/${annonce.numero_annonce}`">
                         <div class="cards__image">
                             <img :src=annonce.images[0].adresse>

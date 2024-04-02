@@ -11,6 +11,9 @@ class Model
     private $tableName;
     private $pdo;
     private $resultChain;
+    private $minColumn; 
+    private $maxColumn;
+    private $whereClause;
 
     public function __construct()
     {
@@ -34,53 +37,110 @@ class Model
     {
         $query = "SELECT * FROM {$this->tableName}";
         $statement = $this->pdo->prepare($query);
+
+        if (!empty($this->whereClause)) {
+            $query .= " WHERE {$this->whereClause}";
+        }
+
+        if($statement->execute()) {
+            $this->resultChain = $statement->fetchAll(PDO::FETCH_ASSOC);
+        } else return [];
+
+    }
+
+    public function get(): array
+    {
+        if (!empty($this->minColumn)) {
+            $query = "SELECT MIN({$this->minColumn}) AS min_value FROM {$this->tableName}";
+        } elseif (!empty($this->maxColumn)) {
+            $query = "SELECT MAX({$this->maxColumn}) AS max_value FROM {$this->tableName}";
+        } else {
+            $query = "SELECT * FROM {$this->tableName}";
+        }
+    
+        if (!empty($this->whereClause)) {
+            $query .= " WHERE {$this->whereClause}";
+        }
+
+        $statement = $this->pdo->prepare($query);
         $statement->execute();
-            
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function distinct(string $column): array
     {
         $query = "SELECT DISTINCT {$column} FROM {$this->tableName}";
+
+        if (!empty($this->whereClause)) {
+            $query .= " WHERE {$this->whereClause}";
+        }
+
         $statement = $this->pdo->prepare($query);
         $statement->execute();
             
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function where(string $clause): array
+    public function where(string $clause): self
     {
-        $query = "SELECT * FROM {$this->tableName} WHERE {$clause}";
-        $statement = $this->pdo->prepare($query);
-        $statement->execute();
-            
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
+        $this->whereClause = $clause;
+        return $this;
     }
 
     public function has(array $tables = [], bool $chain = false): array|self
     {
-        $query = "SELECT * FROM {$this->tableName}";
-
+        $select = '';
+    
         if (!empty($tables)) {
+            $query = '';
+    
             foreach ($tables as $table) {
-                $query .= " INNER JOIN {$table} ON {$this->tableName}.id_{$table} = {$table}.id";
+                $queryColumns = "SHOW COLUMNS FROM $table";
+                $statementColumns = $this->pdo->prepare($queryColumns);
+                $statementColumns->execute();
+
+                $columns = array_filter($statementColumns->fetchAll(PDO::FETCH_COLUMN), function($column) {
+                    return $column !== 'id';
+                });
+    
+                foreach ($columns as $column) {
+                    $select .= "{$table}.{$column} AS {$table}_{$column}, ";
+                }
+    
+                $query .= " INNER JOIN $table ON {$this->tableName}.id_$table = $table.id";
             }
+        } else {
+            $query = "SELECT * FROM {$this->tableName}";
         }
 
+        $queryOrigin = "SHOW COLUMNS FROM {$this->tableName}";
+        $statementOrigin = $this->pdo->prepare($queryOrigin);
+        $statementOrigin->execute();
+        
+        $origins = $statementOrigin->fetchAll(PDO::FETCH_COLUMN);
+
+        foreach ($origins as $origin) {
+            $select .= "{$this->tableName}." . $origin . ", ";
+        }
+
+        $select = rtrim($select, ", ");
+        $query = "SELECT $select FROM {$this->tableName} $query";
+    
         $statement = $this->pdo->prepare($query);
         if ($statement->execute()) {
             $this->resultChain = $statement->fetchAll(PDO::FETCH_ASSOC);
-
+    
             if ($chain) {
                 return $this;
-            } else return $this->resultChain;
+            } else {
+                return $this->resultChain;
+            }
         }
-
+    
         return [];
-
     }
 
-    public function hasMany(string $tableMany, string $galleryTable, string $idName, bool $chain = false, int $limit = null): array|self
+    public function hasMany(string $tableMany, string $galleryTable, bool $chain = false, int $limit = null): array|self
     {
         if (empty($this->resultChain)) {
             $this->has();
@@ -89,7 +149,7 @@ class Model
         $results = $this->resultChain;
 
         foreach ($results as $key => $value) {
-            $id = $results[$key][$idName];
+            $id = $results[$key]['id'];
             
             $query_many = "SELECT * FROM {$galleryTable}
                             INNER JOIN {$tableMany} ON {$galleryTable}.id_{$tableMany} = {$tableMany}.id
@@ -110,6 +170,46 @@ class Model
         } else  {
             $this->resultChain = $results;
             return $this->resultChain;
+        }
+    }
+
+    public function min(string $column): self
+    {
+        $this->minColumn = $column;
+        $this->maxColumn = null;
+        return $this;
+    }
+
+    public function max(string $column): self
+    {
+        $this->maxColumn = $column;
+        $this->minColumn = null;
+        return $this;
+    }
+
+    public function belongsTo(string $belongsTable, string $belongsColumn): array
+    {
+        $query =    "SELECT DISTINCT {$this->tableName}.$belongsColumn AS $belongsColumn 
+                    FROM $belongsTable
+                    INNER JOIN {$this->tableName} ON $belongsTable .id_{$this->tableName} = {$this->tableName}.id";
+        
+        $statement = $this->pdo->prepare($query);
+        $statement->execute();
+            
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function find(int $id)
+    {
+        $query = "SELECT * FROM {$this->tableName} WHERE id = ?";
+        $statement = $this->pdo->prepare($query);
+        $statement->execute([$id]);
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+    
+        if ($result) {
+            return $result;
+        } else {
+            return null;
         }
     }
 }
