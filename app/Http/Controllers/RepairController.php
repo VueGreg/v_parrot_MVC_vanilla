@@ -9,8 +9,8 @@ class RepairController extends Controller
     public function index()
     {
         $reparations = new ReparationsModel();
-        $data['prestations'] = $reparations->getAllData();
-        $data['categories'] = $reparations->getCategories();
+        $data['prestations'] = $reparations::all();
+        $data['categories'] = $reparations::distinct('categorie');
 
         $this->view('vitrine/reparations', $data);
     }

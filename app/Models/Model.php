@@ -54,12 +54,19 @@ class Model
         return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public static function objectData()
+    public static function has(array $tables): array
     {
-        $query = ("SELECT * FROM " . self::$tableName);
+        $query = "SELECT * FROM " . self::$tableName;
+
+        if (is_array($tables)) {
+            foreach ($tables as $table) {
+                $query .= " INNER JOIN " . $table . " ON " . self::$tableName . "." . "id_" . $table . " = " . $table . ".id";
+            }
+        }
+
         $statement = self::$pdo->prepare($query);
         $statement->execute();
-            
-        return $statement->fetchAll(PDO::FETCH_CLASS, get_called_class());
+                
+        return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 }

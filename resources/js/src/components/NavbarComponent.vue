@@ -10,7 +10,7 @@
     <div class="container-fluid">
             <LinkPOO class="nav__navigate-link" activeClass="active" to="/">Acceuil</LinkPOO>
             <LinkPOO class="nav__navigate-link" activeClass="active" to="/reparations">Reparation</LinkPOO>
-            <LinkPOO class="nav__navigate-link" activeClass="active" to="/annonces">Véhicules d'occasion</LinkPOO>
+            <LinkPOO class="nav__navigate-link" activeClass="active" to="/vehicules">Véhicules d'occasion</LinkPOO>
         <button class="nav__navigate-btn navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
