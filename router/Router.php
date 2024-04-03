@@ -22,6 +22,7 @@ class Router
         $path = explode('?', $this->request->getUri())[0];
         $action = $this->routes[$path] ?? null;
 
+
         if (is_array($action)) {
             [$className, $method] = $action;
 

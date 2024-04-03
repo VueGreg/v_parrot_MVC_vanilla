@@ -3,6 +3,16 @@
     "require": {
         "vlucas/phpdotenv": "^4.2.0"
     },
+    "autoload": {
+        "psr-4": {
+            "Utils\\": "app/Utils",
+            "Models\\": "app/Models",
+            "Router\\": "Router",
+            "Controllers\\": "app/Http/Controllers",
+            "Request\\": "app/Http/Request",
+            "Actions\\": "app/Actions"
+        }
+    },
     "config": {
         "sort-packages": true,
         "optimize-autoloader": true

@@ -25,13 +25,11 @@ class Controller
         }else var_dump($path . " n'existe pas");
     }
 
-    public function renderApi(array $datas): mixed
+    public function renderApi(array $datas): void
     {
-        return json_encode($datas);
-    }
+        header('Content-Type: application/json');
+        echo json_encode($datas);
 
-    public function countData(array $datas): int
-    {
-        return count($datas);
+        exit;
     }
 }

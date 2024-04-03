@@ -14,5 +14,9 @@ $router->get('/contact', ["Controllers\ContactController", 'index']);
 
 //Route Dashboard 
 
+//Route API
+$router->get('/filtre', ["Controllers\FilterAPIController", "getAll"]);
+$router->get('/filtre/params', ["Controllers\FilterAPIController", "filter"]);
+
 //Call route
 return $router->dispatch();

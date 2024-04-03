@@ -6,16 +6,17 @@ use Models\ImagesModel;
 use Models\AnnoncesModel;
 use Models\HorairesModel;
 use Models\EntrepriseModel;
-use Models\ReparationsModel;
 use Models\TemoignagesModel;
 use Actions\ChangeHoraireFormat;
+
+use app\Utils\QueryBuilder;
 
 class HomeController extends Controller
 {
     public function index()
     {
         $images = new ImagesModel();
-        $json['images'] =  $images->all();
+        $json['images'] = $images->all();
 
         $horaires = new HorairesModel();
         $changeHoraire = $horaires->all();
@@ -29,7 +30,7 @@ class HomeController extends Controller
         $json['temoignages'] = $temoignages->all();
 
         $annonces = new AnnoncesModel();
-        $json['nombre_vehicules'] = $this->countData($annonces->where("status = 0"));
+        $json['nombre_vehicules'] = $annonces->query()->count()->where("status", "=" , "0")->get();
 
         $this->view('vitrine/acceuil', $json);
     }

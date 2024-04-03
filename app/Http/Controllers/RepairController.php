@@ -10,7 +10,7 @@ class RepairController extends Controller
     {
         $reparations = new ReparationsModel();
         $data['prestations'] = $reparations->all();
-        $data['categories'] = $reparations->distinct('categorie');
+        $data['categories'] = $reparations->query()->distinct('categorie')->get();
 
         $this->view('vitrine/reparations', $data);
     }

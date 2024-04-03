@@ -2,6 +2,7 @@
 
 namespace Models;
 
+
 class PermissionsModel extends Model
 {
 

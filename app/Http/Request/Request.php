@@ -45,4 +45,34 @@ class Request
             return $this->post[$field] ?? $default;
         }
     }
+
+
+
+    //Rules supported
+    // required, unique, ...
+
+
+    public function validate(array $data, array $rules): array|bool
+    {
+        $validated = [];
+
+        foreach ($rules as $key => $rule) {
+            $fieldRules = explode(',', $rule);
+
+            foreach ($fieldRules as $fieldRule) {
+                $fieldRule = trim($fieldRule);
+
+                if ($fieldRule === 'required' && empty($data[$key])) {
+                    $validated[$key] = "Le champ $key est requis.";
+                } elseif ($fieldRule === 'unique') {
+                    $validated[$key] = "Le champ $key doit être unique.";
+                }
+            }
+        }
+
+        if (is_null($validated)) {
+            return true;
+        }
+        return $validated;
+    }
 }
