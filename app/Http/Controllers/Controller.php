@@ -6,13 +6,14 @@ use Countable;
 
 class Controller
 {
-    public function view(string $filename, array $datas = [])
+    public function view(string $filename, array $datas = [], bool $hasRouter = false)
     {
         $path = "../resources/views/index.php";
 
         $vue_info = array(
             'filename' => $filename,
-            'datas' => $datas
+            'datas' => $datas,
+            'hasRouter' => $hasRouter
         );
         
         if (file_exists($path)) {

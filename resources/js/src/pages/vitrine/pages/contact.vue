@@ -1,7 +1,5 @@
 <script setup>
 
-    import LayoutView from '../../Layout/LayoutView.vue';
-
     defineProps({
         data: Object
     })
@@ -9,49 +7,45 @@
 </script>
 
 <template>
-    <LayoutView>
-        <template #content>
-        <main class="row">
-            <div class="title col-10 col-sm-7 col-md-5">
-                <h2>CONTACT</h2>
-                <p>Envoyez nous votre demande avec vos coordonnées, notre équipe reviendra vers vous dans les meilleurs délais.</p>
-            </div>
-            <form class="form col-8 col-sm-7 col-md-5">
-                <Transition>
-                    <div class="vehicle" v-if="isVisible">
-                        <p>Ma demande concerne le véhicule: <br> {{ vehicules.marque }} {{ vehicules.modele }} {{ vehicules.motorisation }}</p>
-                    </div>
-                </Transition>
+    <main class="row">
+        <div class="title col-10 col-sm-7 col-md-5">
+            <h2>CONTACT</h2>
+            <p>Envoyez nous votre demande avec vos coordonnées, notre équipe reviendra vers vous dans les meilleurs délais.</p>
+        </div>
+        <form class="form col-8 col-sm-7 col-md-5">
+            <Transition>
+                <div class="vehicle" v-if="isVisible">
+                    <p>Ma demande concerne le véhicule: <br> {{ vehicules.marque }} {{ vehicules.modele }} {{ vehicules.motorisation }}</p>
+                </div>
+            </Transition>
 
-                <div class="form__input">
-                    <input class="form__field" @focusout="testCaracters()" v-model="name" type="text" name="nom" id="nom" placeholder="Votre nom">
-                    <label class="form__label" for="nom">Votre nom</label>
-                    <span class="form__input-alert" v-if="errorMessage">{{ errorMessage }}</span>
-                </div>
-                <div class="form__input">
-                    <input class="form__field" @focusout="testCaracters()" v-model="surname" type="text" name="prenom" id="prenom" placeholder="Votre prénom">
-                    <label class="form__label" for="prenom">Votre prénom</label>
-                    <span class="form__input-alert" v-if="errorMessage">{{ errorMessage }}</span>
-                </div>
-                <div class="form__input">
-                    <input class="form__field" @focusout="Portable_Valide(tel)" v-model="tel" type="tel" name="tel" id="tel" placeholder="Votre numéro de téléphone">
-                    <label class="form__label" for="tel">Votre numéro de téléphone</label>
-                    <span class="form__input-alert" v-if="numValide">*Numero invalide</span>
-                </div>
-                <div class="form__input">
-                    <input class="form__field" @focusout="Mail_Valide(email)" v-model="email" type="email" name="email" id="email" placeholder="Votre adresse mail">
-                    <label class="form__label" for="email">Votre adresse mail</label>
-                    <span class="form__input-alert" v-if="mailValide">*Adresse invalide</span>
-                </div>
-                <div class="form__input">
-                    <textarea rows="5" class="form__field" v-model="message" type="text" name="message" id="message" placeholder="Votre message"></textarea>
-                    <label class="form__label" for="message">Votre message</label>
-                </div>
-            </form>
-            <button class="col-6 col-sm-4 col-md-3" @click="sendMessage()">Envoyer message</button>
-        </main>
-        </template>
-    </LayoutView>
+            <div class="form__input">
+                <input class="form__field" @focusout="testCaracters()" v-model="name" type="text" name="nom" id="nom" placeholder="Votre nom">
+                <label class="form__label" for="nom">Votre nom</label>
+                <span class="form__input-alert" v-if="errorMessage">{{ errorMessage }}</span>
+            </div>
+            <div class="form__input">
+                <input class="form__field" @focusout="testCaracters()" v-model="surname" type="text" name="prenom" id="prenom" placeholder="Votre prénom">
+                <label class="form__label" for="prenom">Votre prénom</label>
+                <span class="form__input-alert" v-if="errorMessage">{{ errorMessage }}</span>
+            </div>
+            <div class="form__input">
+                <input class="form__field" @focusout="Portable_Valide(tel)" v-model="tel" type="tel" name="tel" id="tel" placeholder="Votre numéro de téléphone">
+                <label class="form__label" for="tel">Votre numéro de téléphone</label>
+                <span class="form__input-alert" v-if="numValide">*Numero invalide</span>
+            </div>
+            <div class="form__input">
+                <input class="form__field" @focusout="Mail_Valide(email)" v-model="email" type="email" name="email" id="email" placeholder="Votre adresse mail">
+                <label class="form__label" for="email">Votre adresse mail</label>
+                <span class="form__input-alert" v-if="mailValide">*Adresse invalide</span>
+            </div>
+            <div class="form__input">
+                <textarea rows="5" class="form__field" v-model="message" type="text" name="message" id="message" placeholder="Votre message"></textarea>
+                <label class="form__label" for="message">Votre message</label>
+            </div>
+        </form>
+        <button class="col-6 col-sm-4 col-md-3" @click="sendMessage()">Envoyer message</button>
+    </main>
 </template>
 
 <style lang="scss" scoped>

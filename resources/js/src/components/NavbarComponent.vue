@@ -1,6 +1,7 @@
 <script setup>
 
     import LinkPOO from './LinkPOO.vue';
+    import { RouterLink } from 'vue-router';
 
 </script>
 
@@ -8,16 +9,16 @@
 <template>
     <nav class="navbar navbar-expand-lg navbar-expand-sm navbar-dark nav__navigate">
     <div class="container-fluid">
-            <LinkPOO class="nav__navigate-link" activeClass="active" to="/">Acceuil</LinkPOO>
-            <LinkPOO class="nav__navigate-link" activeClass="active" to="/reparations">Reparation</LinkPOO>
-            <LinkPOO class="nav__navigate-link" activeClass="active" to="/vehicules">Véhicules d'occasion</LinkPOO>
+            <RouterLink class="nav__navigate-link" activeClass="active" to="/">Acceuil</RouterLink>
+            <RouterLink class="nav__navigate-link" activeClass="active" to="/reparations">Reparation</RouterLink>
+            <RouterLink class="nav__navigate-link" activeClass="active" to="/vehicules">Véhicules d'occasion</RouterLink>
         <button class="nav__navigate-btn navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-                <LinkPOO class="nav__navigate-link" activeClass="active" to="/contact">Contact</LinkPOO>
-                <LinkPOO class="nav__navigate-link" to="/dashboard/messages" v-if="isConnect">Tableau de bord</LinkPOO>
+                <RouterLink class="nav__navigate-link" activeClass="active" to="/contact">Contact</RouterLink>
+                <!-- <LinkPOO class="nav__navigate-link" to="/dashboard/messages" v-if="isConnect">Tableau de bord</LinkPOO> -->
             </div>
         </div>
     </div>

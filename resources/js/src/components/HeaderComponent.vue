@@ -38,12 +38,12 @@
                 </div>
                 <p class="button__header-text">Déconnexion</p>
             </div>
-            <RouterLink class="navigate-link button__header" to="/connexion" v-else>
+            <!-- <RouterLink class="navigate-link button__header" to="/connexion" v-else>
                 <div class="button__header-circle">
                     <i class="fa-solid fa-arrow-right-to-bracket" style="color: #ffffff;"></i>
                 </div>
                 <p class="button__header-text">Connexion</p>
-            </RouterLink>
+            </RouterLink> -->
         </div>
     </header>
 

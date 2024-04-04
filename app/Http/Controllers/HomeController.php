@@ -6,10 +6,10 @@ use Models\ImagesModel;
 use Models\AnnoncesModel;
 use Models\HorairesModel;
 use Models\EntrepriseModel;
+use Models\ReparationsModel;
+
 use Models\TemoignagesModel;
 use Actions\ChangeHoraireFormat;
-
-use app\Utils\QueryBuilder;
 
 class HomeController extends Controller
 {
@@ -30,8 +30,15 @@ class HomeController extends Controller
         $json['temoignages'] = $temoignages->all();
 
         $annonces = new AnnoncesModel();
-        $json['nombre_vehicules'] = $annonces->query()->count()->where("status", "=" , "0")->get();
+        $json['nombre_vehicules'] = $annonces->query()->count()->where("status", "=" , 0)->get();
 
-        $this->view('vitrine/acceuil', $json);
+        $reparations = new ReparationsModel();
+        $json['prestations'] = $reparations->all();
+        $json['categories'] = $reparations->query()->distinct('categorie')->get();
+
+        $vehicules = new AnnoncesModel();
+        $json['annonces'] = $vehicules->getAllAnnonces();
+
+        $this->view('vitrine/vitrine', $json, true);
     }
 }

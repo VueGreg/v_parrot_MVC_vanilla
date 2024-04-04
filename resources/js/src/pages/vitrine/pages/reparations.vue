@@ -1,7 +1,5 @@
 <script setup>
 
-    import LayoutView from '../../Layout/LayoutView.vue'
-
     defineProps({
         data: Object
     })
@@ -9,29 +7,25 @@
 </script>
 
 <template>
-    <LayoutView>
-        <template #content>
-            <main class="row">
-                <h2 class="col-10">RETROUVEZ L'ENSEMBLE DE NOS PRESTATIONS</h2>
-                <section>
-                    <div class="repair__card col-10 col-sm-7 col-md-5" v-for="categorie in data.categories" :key="categorie.id">
-                        <h4 class="repair__card-title">{{ categorie.categorie }}</h4>
-                        <div class="repair__card-description" v-for="prestation in data.prestations" :key="prestation.id">
-                            <ul>
-                                <li class="repair__card-list" v-if="prestation.categorie == categorie.categorie">{{ prestation.description }}</li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
-            </main>
-        </template>
-    </LayoutView>
+    <main class="row">
+        <h2 class="col-10">RETROUVEZ L'ENSEMBLE DE NOS PRESTATIONS</h2>
+        <section>
+            <div class="repair__card col-10 col-sm-7 col-md-5" v-for="categorie in data.categories" :key="categorie.id">
+                <h4 class="repair__card-title">{{ categorie.categorie }}</h4>
+                <div class="repair__card-description" v-for="prestation in data.prestations" :key="prestation.id">
+                    <ul>
+                        <li class="repair__card-list" v-if="prestation.categorie == categorie.categorie">{{ prestation.description }}</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
 </template>
 
 <style lang="scss" scoped>
 
-    @import '../../../../scss/variable.scss';
-    @import '../../../../scss/mixins.scss';
+    @import '../../../../../scss/variable.scss';
+    @import '../../../../../scss/mixins.scss';
 
     h2{
         @include h2-main;

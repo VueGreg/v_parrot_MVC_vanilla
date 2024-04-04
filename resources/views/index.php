@@ -20,6 +20,8 @@
         <?php 
             $filename = $vue_info['filename'];
             echo "<script>var filename = '{$filename}';</script>";
+            $hasRouter = $vue_info['hasRouter'];
+            echo "<script>var hasRouter = '{$hasRouter}';</script>";
         ?>
         <script src="https://kit.fontawesome.com/a0d5f723cd.js" crossorigin="anonymous"></script>
     </body>

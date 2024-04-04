@@ -27,14 +27,23 @@ class QueryBuilder
 
     public function where(string $column, string $operator, $value): self
     {
-        $element = explode(".", $column)[1];
+        if (strpos($column, '.') !== false) {
+            $element = explode(".", $column)[1];
+            $column = "`$column`";
+        } else {
+            $element = $column;
+            $column = "`$column`";
+        }
+        $placeholder = ":$element";
+
+        if (!empty($this->query)) {
+            $this->query .= " WHERE $column $operator $placeholder";
+        } else {
+            $this->query .= "SELECT * FROM {$this->tableName} WHERE $column $operator $placeholder";
+        }
 
         $this->parameters[$element] = $value;
-        if (!empty($this->query)) {
-            $this->query .= " WHERE $column $operator :$element";
-        } else {
-            $this->query .= "SELECT * FROM {$this->tableName} WHERE $column $operator :$element";
-        }
+
         return $this;
     }
 
