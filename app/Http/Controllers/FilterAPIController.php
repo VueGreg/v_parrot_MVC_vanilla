@@ -12,18 +12,24 @@ class FilterAPIController extends Controller
 {
     public function filter($params)
     {
-        if (!empty($params) && isset($params['mark'])) {
+        if (!empty($params) && isset($params['marque'])) {
 
             $models = new AnnoncesModel();
 
-            $data = $models ->query()->select('vehicules.modele AS modele')
+            $data = $models ->query()->select('vehicules.modele AS modele, energies.nom AS energie')
                             ->join('vehicules', 'annonces.id_vehicules', '=', 'vehicules.id')
-                            ->where("vehicules.marque", "LIKE" ,"{$params['mark']}")
-                            ->where("annonces.status", "=" , "0")
+                            ->join('energies', 'annonces.id_energies', '=', 'energies.id')
+                            ->where("vehicules.marque", "LIKE" ,"{$params['marque']}")
+                            ->where("annonces.status", "=" , 0)
                             ->get();
 
             $this->renderApi($data);
-        } else {
+
+        } elseif (!empty($params) && isset($params['modele'])) {
+            # code...
+        }
+        
+        else {
             $this->renderApi(['error' => 'Missing or invalid parameters']);
         }
     }

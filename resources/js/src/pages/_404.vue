@@ -1,6 +1,6 @@
 <script setup>
 
-    import LinkPOO from '../../components/LinkPOO.vue';
+    import LinkPOO from '../components/LinkPOO.vue';
 
 </script>
 

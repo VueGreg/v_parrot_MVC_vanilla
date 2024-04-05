@@ -10,6 +10,7 @@ class QueryBuilder
     private $query;
     private $parameters;
     private $pdo;
+    private $whereClause;
 
     public function __construct(string $tableName, PDO $pdo)
     {
@@ -25,24 +26,17 @@ class QueryBuilder
         return $this;
     }
 
-    public function where(string $column, string $operator, $value): self
+    public function where(string $column, string $operator, string|int $value): self
     {
         if (strpos($column, '.') !== false) {
-            $element = explode(".", $column)[1];
-            $column = "`$column`";
-        } else {
-            $element = $column;
-            $column = "`$column`";
-        }
-        $placeholder = ":$element";
-
-        if (!empty($this->query)) {
-            $this->query .= " WHERE $column $operator $placeholder";
-        } else {
-            $this->query .= "SELECT * FROM {$this->tableName} WHERE $column $operator $placeholder";
+            $expColumn = explode(".", $column)[1];
         }
 
-        $this->parameters[$element] = $value;
+        $element = str_replace('.', '_', $column);
+        $placeholder = ":$expColumn";
+
+        $this->whereClause[] = "$column $operator $placeholder";
+        $this->parameters[$expColumn] = $value;
 
         return $this;
     }
@@ -67,7 +61,7 @@ class QueryBuilder
 
     public function select(string $columns): self
     {
-        $this->query .= "SELECT $columns ";
+        $this->query .= "SELECT $columns FROM {$this->tableName}";
         return $this;
     }
 
@@ -103,6 +97,11 @@ class QueryBuilder
 
     public function get(): array
     {
+        if (!empty($this->whereClause) && is_array($this->whereClause)) {
+            $whereConditions = implode(" AND ", $this->whereClause);
+            $this->query .= " WHERE $whereConditions";
+        }
+        
         $statement = $this->pdo->prepare($this->getQuery());
         foreach ($this->parameters as $column => $value) {
             $statement->bindValue(":$column", $value);
