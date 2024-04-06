@@ -2,6 +2,8 @@
 
 namespace Controllers;
 
+use Utils\Controller;
+
 
 class _404Controller extends Controller
 {

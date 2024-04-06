@@ -103,11 +103,21 @@ class TableRelationship
         }
     }
 
-    public function belongsTo(string $belongsTable, string $belongsColumn): array
+    public function belongsTo(string $belongsTable, string|array $belongsColumn): array
     {
-        $query =    "SELECT DISTINCT {$this->tableName}.$belongsColumn AS $belongsColumn 
-                    FROM $belongsTable
-                    INNER JOIN {$this->tableName} ON $belongsTable .id_{$this->tableName} = {$this->tableName}.id";
+        if (is_array($belongsColumn)) {
+            $columnsList = implode(', ', array_map(function($column) use ($belongsTable) {
+                return "{$this->tableName}.{$column} AS {$column}";
+            }, $belongsColumn));
+
+            $query =    "SELECT DISTINCT $columnsList 
+                        FROM $belongsTable
+                        INNER JOIN {$this->tableName} ON {$belongsTable}.id_{$this->tableName} = {$this->tableName}.id";
+        } else {
+            $query =    "SELECT DISTINCT {$this->tableName}.$belongsColumn AS $belongsColumn 
+                        FROM $belongsTable
+                        INNER JOIN {$this->tableName} ON {$belongsTable}.id_{$this->tableName} = {$this->tableName}.id";
+        }
         
         $statement = $this->pdo->prepare($query);
         $statement->execute();

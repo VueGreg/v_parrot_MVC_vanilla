@@ -2,6 +2,8 @@
 
 namespace Models;
 
+use Utils\Model;
+
 
 class VehiculesModel extends Model
 {
@@ -13,5 +15,10 @@ class VehiculesModel extends Model
     public function belongsToModelAnnonces(): array
     {
         return $this->relationships()->belongsTo('annonces', 'modele');
+    }
+
+    public function belongsToModelMarqueAnnonces(): array
+    {
+        return $this->relationships()->belongsTo('annonces', ['marque', 'modele']);
     }
 }

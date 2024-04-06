@@ -1,6 +1,6 @@
 <?php
 
-namespace Request;
+namespace Utils;
 
 class Request
 {

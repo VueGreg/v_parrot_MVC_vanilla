@@ -2,6 +2,8 @@
 
 namespace Request;
 
+use Utils\Request;
+
 class RequestAnnonces extends Request
 {
     public function validation(array $data): array|bool

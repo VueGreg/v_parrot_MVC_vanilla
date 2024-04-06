@@ -30,9 +30,9 @@ class QueryBuilder
     {
         if (strpos($column, '.') !== false) {
             $expColumn = explode(".", $column)[1];
-        }
+        } else $expColumn = $column;
 
-        $element = str_replace('.', '_', $column);
+        // $element = str_replace('.', '_', $column);
         $placeholder = ":$expColumn";
 
         $this->whereClause[] = "$column $operator $placeholder";

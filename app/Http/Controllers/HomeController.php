@@ -2,12 +2,13 @@
 
 namespace Controllers;
 
+use Utils\Controller;
 use Models\ImagesModel;
 use Models\AnnoncesModel;
 use Models\HorairesModel;
 use Models\EntrepriseModel;
-use Models\ReparationsModel;
 
+use Models\ReparationsModel;
 use Models\TemoignagesModel;
 use Actions\ChangeHoraireFormat;
 

@@ -2,8 +2,9 @@
 
 namespace Router;
 
+use Utils\Request;
 use Controllers\_404Controller;
-use Request\Request;
+
 
 class Router
 {

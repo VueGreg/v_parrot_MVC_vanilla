@@ -2,11 +2,10 @@
 
 namespace Controllers;
 
+use Utils\Controller;
 use Models\AnnoncesModel;
 use Models\EnergiesModel;
 use Models\VehiculesModel;
-
-use app\Utils\QueryBuilder;
 
 class FilterAPIController extends Controller
 {
@@ -14,9 +13,9 @@ class FilterAPIController extends Controller
     {
         if (!empty($params) && isset($params['marque'])) {
 
-            $models = new AnnoncesModel();
+            $marque = new AnnoncesModel();
 
-            $data = $models ->query()->select('vehicules.modele AS modele, energies.nom AS energie')
+            $data = $marque ->query()->select('vehicules.modele AS modele, energies.nom AS energie')
                             ->join('vehicules', 'annonces.id_vehicules', '=', 'vehicules.id')
                             ->join('energies', 'annonces.id_energies', '=', 'energies.id')
                             ->where("vehicules.marque", "LIKE" ,"{$params['marque']}")
@@ -26,7 +25,17 @@ class FilterAPIController extends Controller
             $this->renderApi($data);
 
         } elseif (!empty($params) && isset($params['modele'])) {
-            # code...
+
+            $modele = new AnnoncesModel();
+
+            $data = $modele ->query()->select('vehicules.marque AS marque, energies.nom AS energie')
+                            ->join('vehicules', 'annonces.id_vehicules', '=', 'vehicules.id')
+                            ->join('energies', 'annonces.id_energies', '=', 'energies.id')
+                            ->where('vehicules.modele', 'LIKE', "{$params['modele']}")
+                            ->where("annonces.status", "=" , 0)
+                            ->get();
+
+            $this->renderApi($data);
         }
         
         else {
@@ -47,6 +56,7 @@ class FilterAPIController extends Controller
             $vehiculeModel = new VehiculesModel();
             $data['marqueDispo'] = $vehiculeModel->belongsToMarkAnnonces();
             $data['modeleDispo'] = $vehiculeModel->belongsToModelAnnonces();
+            $data['modeleEtMarque'] = $vehiculeModel->belongsToModelMarqueAnnonces();
 
             $vehiculeEnergy = new EnergiesModel();
             $data['energieDispo'] = $vehiculeEnergy->belongsToAnnonces();

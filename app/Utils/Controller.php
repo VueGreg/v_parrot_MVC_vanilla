@@ -1,8 +1,6 @@
 <?php
 
-namespace Controllers;
-
-use Countable;
+namespace Utils;
 
 class Controller
 {

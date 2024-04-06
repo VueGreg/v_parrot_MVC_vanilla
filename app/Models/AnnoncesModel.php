@@ -2,6 +2,7 @@
 
 namespace Models;
 
+use Utils\Model;
 use Request\RequestAnnonces;
 
 class AnnoncesModel extends Model
