@@ -45,22 +45,23 @@ class FilterAPIController extends Controller
 
     public function getAll()
     {
-            $vehicules = new AnnoncesModel();
-            $data['minYear'] = $vehicules->query()->min('annee')->where("annonces.status", "=" ,"0")->get();
-            $data['maxYear'] = $vehicules->query()->max('annee')->where("annonces.status", "=" ,"0")->get();
-            $data['minKilometer'] = $vehicules->query()->min('kilometrage')->where("annonces.status", "=" ,"0")->get();
-            $data['maxKilometer'] = $vehicules->query()->max('kilometrage')->where("annonces.status", "=" ,"0")->get();
-            $data['minPrice'] = $vehicules->query()->min('prix')->where("annonces.status", "=" ,"0")->get();
-            $data['maxPrice'] = $vehicules->query()->max('prix')->where("annonces.status", "=" ,"0")->get();
+        $vehicules = new AnnoncesModel();
+        $data['minYear'] = $vehicules->query()->min('annee')->where("annonces.status", "=" ,"0")->get();
+        $data['maxYear'] = $vehicules->query()->max('annee')->where("annonces.status", "=" ,"0")->get();
+        $data['minKilometer'] = $vehicules->query()->min('kilometrage')->where("annonces.status", "=" ,"0")->get();
+        $data['maxKilometer'] = $vehicules->query()->max('kilometrage')->where("annonces.status", "=" ,"0")->get();
+        $data['minPrice'] = (float)$vehicules->query()->min('prix')->where("annonces.status", "=" ,"0")->get();
+        $data['maxPrice'] = (float)$vehicules->query()->max('prix')->where("annonces.status", "=" , 0)->get();
+        $data['annonces'] = $vehicules->getAllAnnonces();
 
-            $vehiculeModel = new VehiculesModel();
-            $data['marqueDispo'] = $vehiculeModel->belongsToMarkAnnonces();
-            $data['modeleDispo'] = $vehiculeModel->belongsToModelAnnonces();
-            $data['modeleEtMarque'] = $vehiculeModel->belongsToModelMarqueAnnonces();
+        $vehiculeModel = new VehiculesModel();
+        $data['marqueDispo'] = $vehiculeModel->belongsToMarkAnnonces();
+        $data['modeleDispo'] = $vehiculeModel->belongsToModelAnnonces();
+        $data['modeleEtMarque'] = $vehiculeModel->belongsToModelMarqueAnnonces();
 
-            $vehiculeEnergy = new EnergiesModel();
-            $data['energieDispo'] = $vehiculeEnergy->belongsToAnnonces();
+        $vehiculeEnergy = new EnergiesModel();
+        $data['energieDispo'] = $vehiculeEnergy->belongsToAnnonces();
 
-            $this->renderApi($data);
+        $this->renderApi($data);
     }
 }

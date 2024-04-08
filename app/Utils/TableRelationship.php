@@ -59,6 +59,14 @@ class TableRelationship
         $statement = $this->pdo->prepare($query);
         if ($statement->execute()) {
             $this->resultChain = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($this->resultChain as &$row) {
+                foreach ($row as $key => &$value) {
+                    if (is_numeric($value)) {
+                        $value = (float)$value;
+                    }
+                }
+            }
     
             if ($chain) {
                 return $this;

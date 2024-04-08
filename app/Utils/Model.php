@@ -26,6 +26,7 @@ class Model
 
             $this->pdo = new PDO("mysql:host=".$_ENV["DB_HOST"].";dbname=".$_ENV["DB_NAME"], $_ENV["DB_USERNAME"], $_ENV["DB_PASSWORD"]);
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->pdo->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
             $this->queryBuilder = new QueryBuilder($this->tableName, $this->pdo);
 
         } catch (PDOException $e) {
@@ -51,7 +52,17 @@ class Model
         $statement = $this->pdo->prepare($query);
 
         if ($statement->execute()) {
-            return $statement->fetchAll(PDO::FETCH_ASSOC);
+            $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($results as &$row) {
+                foreach ($row as $key => &$value) {
+                    if (is_numeric($value)) {
+                        $value = (float)$value;
+                    }
+                }
+            }
+
+            return $results;
         } else {
             return [];
         }

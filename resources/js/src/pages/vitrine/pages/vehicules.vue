@@ -2,22 +2,57 @@
 
     import LinkPOO from '../../../components/LinkPOO.vue';
     import FilterFormComponent from '../../../components/FilterFormComponent.vue';
+    import axios from 'axios';
+    import { ref, onMounted, watch } from 'vue';
 
-    defineProps({
-        data: Object
+    const annonces = ref()
+
+    const getAllData = async() => {
+        await axios.get('http://parrotpoo.test/filtre')
+        .then(response => {
+            annonces.value = response.data.annonces
+        })
+        .catch(e => {
+            console.error(e);
+        })
+    }
+
+    onMounted(async() => {
+        await getAllData();
     })
+
+    const searchCar = async (data) => {
+        await getAllData();
+        console.log(data)
+        const { marque, modele, energie, kilometerMax, kilometerMin, yearMin, yearMax, prixMin, prixMax } = data;
+        const filterCondition = (annonce) => {
+            console.log(annonce)
+            return (
+                (!marque || annonce.vehicules_marque === marque) &&
+                annonce.kilometrage <= kilometerMax &&
+                annonce.kilometrage >= kilometerMin &&
+                annonce.annee <= yearMax &&
+                annonce.annee >= yearMin &&
+                annonce.prix <= prixMax &&
+                annonce.prix >= prixMin
+            );
+        };
+
+        return annonces.value = annonces.value.filter((annonce) => filterCondition(annonce));
+
+    };
 
 </script>
 
 <template>
     <main class="row" id="top">
 
-        <h1 class="col-10 col-sm-8 col-md-6">{{ data.count }}</h1>
+        <h1 class="col-10 col-sm-8 col-md-6">{{ "Salut" }}</h1>
 
-        <FilterFormComponent :data="data"/>
+        <FilterFormComponent @update:formData="searchCar"/>
 
         <div class="container__cards col-9 col-sm-6 col-lg-8">
-            <div class="cards" v-for="annonce in data.annonces" :key="annonce.numero_annonce">
+            <div class="cards" v-for="annonce in annonces" :key="annonce.numero_annonce">
                 <LinkPOO class="link" :to="`/dashboard/vehicule/${annonce.numero_annonce}`">
                     <div class="cards__image">
                         <img :src=annonce.images[0].adresse>

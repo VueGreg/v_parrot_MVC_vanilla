@@ -2,36 +2,73 @@
     import useFilterForm from './services/_FilterFormServices';
     import { onMounted, ref, watch, reactive } from 'vue';
     import axios from 'axios';
+    import DropDown from './tools/DropDown.vue';
 
     const { getBaseFilter, baseFilter } = useFilterForm();
-    const isRotated = ref(false);
+
+    const yearMaxRequest = ref()
+    const yearMinRequest = ref()
+    const kilometerMaxRequest = ref()
+    const kilometerMinRequest = ref()
+    const prixMaxRequest = ref()
+    const prixMinRequest = ref()
+    const ecartAnnee = ref()
+    const ecartKilometer = ref()
+    const ecartPrix = ref()
 
     const formData = reactive({
         marque: null,
-        modele: null
+        modele: null,
+        prixMin: null,
+        prixMax: null,
+        kilometerMin: null,
+        kilometerMax: null,
+        yearMin: null,
+        yearMax: null,
+        energie: null
     });
 
     const listMarque = ref([]);
     const listModele = ref([]);
     const listEnergie = ref([]);
 
-    const toggleRotation = () => {
-        isRotated.value = !isRotated.value;
-    };
+    const selected = ref(false);
+
+    const emit = defineEmits(['update:formData'])
 
     onMounted(async() => {
         await getBaseFilter();
+        console.log(baseFilter.value)
         if (baseFilter && baseFilter.value) {
             listMarque.value = baseFilter.value.marqueDispo;
             listModele.value = baseFilter.value.modeleDispo;
             listEnergie.value = baseFilter.value.energieDispo;
+            prixMinRequest.value = baseFilter.value.minPrice;
+            prixMaxRequest.value = baseFilter.value.maxPrice;
+            kilometerMinRequest.value = baseFilter.value.minKilometer;
+            kilometerMaxRequest.value = baseFilter.value.maxKilometer;
+            yearMinRequest.value = baseFilter.value.minYear;
+            yearMaxRequest.value = baseFilter.value.maxYear;
+
+            ecartAnnee.value = yearMaxRequest.value - yearMinRequest.value;
+            ecartKilometer.value = kilometerMaxRequest.value - kilometerMinRequest.value;
+            ecartPrix.value = prixMaxRequest.value - prixMinRequest.value;
+
+            formData.prixMin = baseFilter.value.minPrice;
+            formData.prixMax = baseFilter.value.maxPrice;
+            formData.kilometerMin = baseFilter.value.minKilometer;
+            formData.kilometerMax = baseFilter.value.maxKilometer;
+            formData.yearMin = baseFilter.value.minYear;
+            formData.yearMax = baseFilter.value.maxYear;
+
         }
     });
 
     watch(() => formData.marque, async(param) => {
         if (!param) return;
         try {
-            const response = await axios.get(`http://parrotpoo.test/filtre/params?marque=${param.marque}`);
+            selected.value = false
+            const response = await axios.get(`http://parrotpoo.test/filtre/params?marque=${param}`);
             listModele.value = response.data;
             listEnergie.value = response.data;
         } catch (error) {
@@ -42,18 +79,82 @@
     watch(() => formData.modele, async(param) => {
         if (!param) return;
         try {
+            selected.value = false
             const values = Object.values(baseFilter.value.modeleEtMarque);
             values.forEach(element => {
                 if (element.modele === param) {
                     formData.marque = element.marque;
                 }
             });
-            const response = await axios.get(`http://parrotpoo.test/filtre/params?modele=${param.modele}`);
+            const response = await axios.get(`http://parrotpoo.test/filtre/params?modele=${param}`);
             listEnergie.value = response.data;
         } catch (error) {
             console.error(error);
         }
     });
+
+    watch(() => formData.prixMin, () => {
+        document.querySelector('.outputPriceMini').style.left = (formData.prixMin - prixMinRequest.value)*(100 / (ecartPrix.value)) + '%'
+        if (formData.prixMin >= formData.prixMax) {
+            formData.prixMax = prixMaxRequest.value
+        }
+    })
+
+    watch(() => formData.prixMax, () => {
+        document.querySelector('.outputPriceMaxi').style.left =  (formData.prixMax - prixMinRequest.value)*(100 / (ecartPrix.value)) + '%'
+        if (formData.prixMax <= formData.prixMin) {
+            formData.prixMin = prixMinRequest.value
+        }
+    })
+
+    watch(() => formData.kilometerMin, () => {
+        document.querySelector('.outputKilometerMin').style.left = (formData.kilometerMin - kilometerMinRequest.value)*(100 / (ecartKilometer.value)) + '%'
+        if (formData.kilometerMin >= formData.kilometerMax) {
+            formData.kilometerMax = kilometerMaxRequest.value
+        }
+    })
+
+    watch(() => formData.kilometerMax, () => {
+        document.querySelector('.outputKilometerMax').style.left = (formData.kilometerMax - kilometerMinRequest.value)*(100 / (ecartKilometer.value)) + '%'
+        if (formData.kilometerMax <= formData.kilometerMin) {
+            formData.kilometerMin = kilometerMinRequest.value
+        }
+    })
+
+    watch(() => formData.yearMin, () => {
+        document.querySelector('.outputYearMin').style.left = (formData.yearMin - yearMinRequest.value)*(100 / (ecartAnnee.value)) + '%'
+        if (formData.yearMin >= formData.yearMax) {
+            formData.yearMax = yearMaxRequest.value
+        }
+    })
+
+    watch(() => formData.yearMax, () => {
+        document.querySelector('.outputYearMax').style.left = (formData.yearMax - yearMinRequest.value)*(100 / (ecartAnnee.value)) + '%'
+        if (formData.yearMax <= formData.yearMin) {
+            formData.yearMin = yearMinRequest.value
+        }
+    })
+
+    const searchCars = () => {
+        emit('update:formData', formData)
+    }
+
+    const initialize = async() => {
+        formData.prixMin = prixMinRequest.value;
+        formData.prixMax = prixMaxRequest.value;
+        formData.kilometerMin = kilometerMinRequest.value;
+        formData.kilometerMax = kilometerMaxRequest.value;
+        formData.yearMin = yearMinRequest.value;
+        formData.yearMax = yearMaxRequest.value;
+        formData.modele = null;
+        formData.marque = null;
+        formData.energie = null;
+
+        selected.value = true
+
+        emit('update:formData', formData)
+    }
+
 </script>
 
 
@@ -61,59 +162,45 @@
 
     <form>
         <div class="offcanvas__row">
-            <div class="offcanvas__selectdiv" :class="{ 'rotated': isRotated }" @click="toggleRotation">
-                    <select class="offcanvas__select" v-model="formData.marque" name="marque" id="marque">
-                        <option value="0" disabled selected>Marque</option>
-                        <option v-for="marque in listMarque" :value="marque">{{ marque.marque }}</option>
-                    </select>
-                </div>
-                <div class="offcanvas__selectdiv" :class="{ 'rotated': isRotated }" @click="toggleRotation">
-                    <select class="offcanvas__select" v-model="formData.modele" name="modele" id="modele">
-                        <option value="0" disabled selected>Modèle</option>
-                        <option v-for="modele in listModele" :value="modele">{{ modele.modele }}</option>
-                    </select>
-                </div>
-                <div class="offcanvas__selectdiv" :class="{ 'rotated': isRotated }" @click="toggleRotation">
-                    <select class="offcanvas__select" v-model="energie" name="energie" id="energie">
-                        <option value="0" disabled selected>Energie</option>
-                        <option v-for="energie in listEnergie" :value="energie">{{ energie.energie || energie.nom }}</option>
-                    </select>
-                </div>
+            <DropDown :options="listMarque" default="marque" class="offcanvas__selectdiv" v-model="formData.marque" :watcher="selected"/>
+            <DropDown :options="listModele" default="modele" class="offcanvas__selectdiv" v-model="formData.modele" :watcher="selected"/>
+            <DropDown :options="listEnergie" default="energie" class="offcanvas__selectdiv" v-model="formData.energie" :watcher="selected"/>
         </div>
         <div class="offcanvas__row">
                 <section class="range-slider">
                     <h6>Prix</h6>
-                    <label for="priceMini" class="output outputOne outputPriceMini">{{ prixMin }}€</label>
-                    <label for="priceMaxi" class="output outputTwo outputPriceMaxi">{{ prixMax }}€</label>
+                    <label for="priceMini" class="output outputOne outputPriceMini">{{ formData.prixMin }}€</label>
+                    <label for="priceMaxi" class="output outputTwo outputPriceMaxi">{{ formData.prixMax }}€</label>
                     <span class="full-range"></span>
                     <span class="incl-range"></span>
-                    <input id="priceMini" name="priceMini" :min="prixMinRequest" :max="prixMaxRequest" step="100" type="range" v-model="prixMin">
-                    <input id="priceMaxi" name="priceMaxi" :min="prixMinRequest" :max="prixMaxRequest" step="100" type="range" v-model="prixMax">
+                    <input id="priceMini" name="priceMini" :min="prixMinRequest" :max="prixMaxRequest" step="100" type="range" v-model="formData.prixMin">
+                    <input id="priceMaxi" name="priceMaxi" :min="prixMinRequest" :max="prixMaxRequest" step="100" type="range" v-model="formData.prixMax">
                 </section>
 
                 <section class="range-slider">
                     <h6>Kilométrage</h6>
-                    <label for="kilometerMin" class="output outputOne outputKilometerMin">{{ kilometerMin }}km</label>
-                    <label for="kilometerMax" class="output outputTwo outputKilometerMax">{{ kilometerMax }}km</label>
+                    <label for="kilometerMin" class="output outputOne outputKilometerMin">{{ formData.kilometerMin }}km</label>
+                    <label for="kilometerMax" class="output outputTwo outputKilometerMax">{{ formData.kilometerMax }}km</label>
                     <span class="full-range"></span>
                     <span class="incl-range"></span>
-                    <input id="kilometerMin" name="kilometerMin" :min="kilometerMinRequest" :max="kilometerMaxRequest" step="1000" type="range" v-model="kilometerMin">
-                    <input id="kilometerMax" name="kilometerMax" :min="kilometerMinRequest" :max="kilometerMaxRequest" step="1000" type="range" v-model="kilometerMax">
+                    <input id="kilometerMin" name="kilometerMin" :min="kilometerMinRequest" :max="kilometerMaxRequest" step="1000" type="range" v-model="formData.kilometerMin">
+                    <input id="kilometerMax" name="kilometerMax" :min="kilometerMinRequest" :max="kilometerMaxRequest" step="1000" type="range" v-model="formData.kilometerMax">
                 </section>
 
                 <section class="range-slider">
                     <h6>Année</h6>
-                    <label for="yearMin" class="output outputOne outputYearMin">{{ yearMin }}</label>
-                    <label for="yearMax" class="output outputTwo outputYearMax">{{ yearMax }}</label>
+                    <label for="yearMin" class="output outputOne outputYearMin">{{ formData.yearMin }}</label>
+                    <label for="yearMax" class="output outputTwo outputYearMax">{{ formData.yearMax }}</label>
                     <span class="full-range"></span>
                     <span class="incl-range"></span>
-                    <input id="yearMin" name="yearMin" :min="yearMinRequest" :max="yearMaxRequest" step="1" type="range" v-model="yearMin">
-                    <input id="yearMax" name="yearMax" :min="yearMinRequest" :max="yearMaxRequest" step="1" type="range" v-model="yearMax">
+                    <input id="yearMin" name="yearMin" :min="yearMinRequest" :max="yearMaxRequest" step="1" type="range" v-model="formData.yearMin">
+                    <input id="yearMax" name="yearMax" :min="yearMinRequest" :max="yearMaxRequest" step="1" type="range" v-model="formData.yearMax">
                 </section>
             </div>
+
             <div class="offcanvas__btn">
                 <button @click.prevent="initialize()">Reinitialiser</button>
-                <button data-bs-dismiss="offcanvas" @click.prevent="searchCars()">Rechercher</button>
+                <button @click.prevent="searchCars()">Rechercher</button>
             </div>
     </form>
 
@@ -126,44 +213,6 @@
 
     form {
         display: none;
-    }
-
-    .offcanvas-header {
-        background-color: $dark-grey;
-        color: white;
-        font-family: $font-text-nav-card;
-    }
-
-    .offcanvas__select {
-        inset: none;
-        appearance: none;
-        border: none;
-        border-bottom: 2px solid $color-text-dark;
-        background-color: white;
-        width: 80vw;
-        color: $color-text-dark;
-        font-size: 1em;
-    }
-
-    .offcanvas__selectdiv {
-
-        position: relative;
-
-        &:after {
-            content: '<';
-            font-size: 1.6rem;
-            font-family: Georgia, 'Times New Roman', Times, serif;
-            position: absolute;
-            left: 75vw;
-            transform: rotate(-90deg);
-            transition: all 0.3s ease-in-out;
-            color: $color-text-dark;
-        }
-
-        &.rotated::after {
-            transform: rotate(90deg);
-            transition: all 0.3s ease-in-out;
-        }
     }
 
     .offcanvas__row {
@@ -351,6 +400,7 @@
         .offcanvas__row {
             flex-direction: row;
             justify-content: space-around;
+            margin: 3rem auto;
         }
 
         .offcanvas__select,
@@ -368,11 +418,6 @@
             .output {
                 font-size: 0.8em;
             }
-        }
-
-        .offcanvas__selectdiv::after {
-            left: 90%;
-            top: -0.5rem;
         }
     }
 

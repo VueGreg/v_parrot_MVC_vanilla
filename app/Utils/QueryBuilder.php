@@ -11,6 +11,7 @@ class QueryBuilder
     private $parameters;
     private $pdo;
     private $whereClause;
+    private $oneValue = false;
 
     public function __construct(string $tableName, PDO $pdo)
     {
@@ -44,12 +45,14 @@ class QueryBuilder
     public function min(string $column): self
     {
         $this->query .= "SELECT MIN(`$column`) AS min_value FROM {$this->tableName}";
+        $this->oneValue = true;
         return $this;
     }
 
     public function max(string $column): self
     {
         $this->query .= "SELECT MAX(`$column`) AS max_value FROM {$this->tableName}";
+        $this->oneValue = true;
         return $this;
     }
 
@@ -95,7 +98,7 @@ class QueryBuilder
         return $this->parameters;
     }
 
-    public function get(): array
+    public function get(): mixed
     {
         if (!empty($this->whereClause) && is_array($this->whereClause)) {
             $whereConditions = implode(" AND ", $this->whereClause);
@@ -111,6 +114,10 @@ class QueryBuilder
         if ($statement->execute()) {
             $this->query = '';
         }
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        if ($this->oneValue) {
+            return $statement->fetch(PDO::FETCH_COLUMN);
+            $this->oneValue = false;
+        }else return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 }

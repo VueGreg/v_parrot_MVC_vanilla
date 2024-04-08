@@ -37,9 +37,6 @@ class HomeController extends Controller
         $json['prestations'] = $reparations->all();
         $json['categories'] = $reparations->query()->distinct('categorie')->get();
 
-        $vehicules = new AnnoncesModel();
-        $json['annonces'] = $vehicules->getAllAnnonces();
-
         $this->view('vitrine/vitrine', $json, true);
     }
 }
