@@ -40,6 +40,10 @@ class ComposerStaticInitd045212f6055750cad8473fbb246b23c
         array (
             'GrahamCampbell\\ResultType\\' => 26,
         ),
+        'E' => 
+        array (
+            'Exceptions\\' => 11,
+        ),
         'D' => 
         array (
             'Dotenv\\' => 7,
@@ -91,6 +95,10 @@ class ComposerStaticInitd045212f6055750cad8473fbb246b23c
         array (
             0 => __DIR__ . '/..' . '/graham-campbell/result-type/src',
         ),
+        'Exceptions\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/app/Exceptions',
+        ),
         'Dotenv\\' => 
         array (
             0 => __DIR__ . '/..' . '/vlucas/phpdotenv/src',
@@ -109,13 +117,10 @@ class ComposerStaticInitd045212f6055750cad8473fbb246b23c
         'Actions\\ChangeHoraireFormat' => __DIR__ . '/../..' . '/app/Actions/ChangeHoraireFormat.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-        'Controllers\\ContactController' => __DIR__ . '/../..' . '/app/Http/Controllers/ContactController.php',
-        'Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'Controllers\\FilterAPIController' => __DIR__ . '/../..' . '/app/Http/Controllers/FilterAPIController.php',
         'Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
         'Controllers\\LoginController' => __DIR__ . '/../..' . '/app/Http/Controllers/LoginController.php',
-        'Controllers\\RepairController' => __DIR__ . '/../..' . '/app/Http/Controllers/RepairController.php',
-        'Controllers\\VehiculeController' => __DIR__ . '/../..' . '/app/Http/Controllers/VehiculeController.php',
+        'Controllers\\MessageController' => __DIR__ . '/../..' . '/app/Http/Controllers/MessageController.php',
         'Controllers\\_404Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/_404Controller.php',
         'Dotenv\\Dotenv' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Dotenv.php',
         'Dotenv\\Exception\\ExceptionInterface' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Exception/ExceptionInterface.php',
@@ -158,6 +163,7 @@ class ComposerStaticInitd045212f6055750cad8473fbb246b23c
         'Dotenv\\Util\\Regex' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Util/Regex.php',
         'Dotenv\\Util\\Str' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Util/Str.php',
         'Dotenv\\Validator' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Validator.php',
+        'Exceptions\\CreateException' => __DIR__ . '/../..' . '/app/Exceptions/CreateException.php',
         'GrahamCampbell\\ResultType\\Error' => __DIR__ . '/..' . '/graham-campbell/result-type/src/Error.php',
         'GrahamCampbell\\ResultType\\Result' => __DIR__ . '/..' . '/graham-campbell/result-type/src/Result.php',
         'GrahamCampbell\\ResultType\\Success' => __DIR__ . '/..' . '/graham-campbell/result-type/src/Success.php',
@@ -170,7 +176,6 @@ class ComposerStaticInitd045212f6055750cad8473fbb246b23c
         'Models\\ImagesModel' => __DIR__ . '/../..' . '/app/Models/ImagesModel.php',
         'Models\\List_equipementsModel' => __DIR__ . '/../..' . '/app/Models/List_equipementsModel.php',
         'Models\\MessagesModel' => __DIR__ . '/../..' . '/app/Models/MessagesModel.php',
-        'Models\\Model' => __DIR__ . '/../..' . '/app/Models/Model.php',
         'Models\\PermissionsModel' => __DIR__ . '/../..' . '/app/Models/PermissionsModel.php',
         'Models\\ReparationsModel' => __DIR__ . '/../..' . '/app/Models/ReparationsModel.php',
         'Models\\TemoignagesModel' => __DIR__ . '/../..' . '/app/Models/TemoignagesModel.php',
@@ -181,7 +186,8 @@ class ComposerStaticInitd045212f6055750cad8473fbb246b23c
         'PhpOption\\Option' => __DIR__ . '/..' . '/phpoption/phpoption/src/PhpOption/Option.php',
         'PhpOption\\Some' => __DIR__ . '/..' . '/phpoption/phpoption/src/PhpOption/Some.php',
         'PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/PhpToken.php',
-        'Request\\Request' => __DIR__ . '/../..' . '/app/Http/Request/Request.php',
+        'Request\\RequestAnnonces' => __DIR__ . '/../..' . '/app/Http/Request/RequestAnnonces.php',
+        'Request\\RequestMessage' => __DIR__ . '/../..' . '/app/Http/Request/RequestMessage.php',
         'Router\\Router' => __DIR__ . '/../..' . '/Router/Router.php',
         'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
         'Symfony\\Polyfill\\Ctype\\Ctype' => __DIR__ . '/..' . '/symfony/polyfill-ctype/Ctype.php',
@@ -189,7 +195,10 @@ class ComposerStaticInitd045212f6055750cad8473fbb246b23c
         'Symfony\\Polyfill\\Php80\\Php80' => __DIR__ . '/..' . '/symfony/polyfill-php80/Php80.php',
         'Symfony\\Polyfill\\Php80\\PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/PhpToken.php',
         'UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
+        'Utils\\Controller' => __DIR__ . '/../..' . '/app/Utils/Controller.php',
+        'Utils\\Model' => __DIR__ . '/../..' . '/app/Utils/Model.php',
         'Utils\\QueryBuilder' => __DIR__ . '/../..' . '/app/Utils/QueryBuilder.php',
+        'Utils\\Request' => __DIR__ . '/../..' . '/app/Utils/Request.php',
         'Utils\\TableRelationship' => __DIR__ . '/../..' . '/app/Utils/TableRelationship.php',
         'ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
     );

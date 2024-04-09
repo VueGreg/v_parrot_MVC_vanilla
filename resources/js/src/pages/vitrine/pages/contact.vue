@@ -1,13 +1,59 @@
 <script setup>
 
+    import InputText from '../../../components/tools/InputText.vue';
+    import AreaText from '../../../components/tools/AreaText.vue';
+    import Modal from '../../../components/ModalComponent.vue';
+    import { reactive, ref } from 'vue';
+    import axios from 'axios';
+    import { useRouter } from 'vue-router';
+
     defineProps({
         data: Object
     })
+
+    const formData = reactive({
+        nom: null,
+        prenom: null,
+        num_telephone: null,
+        mail: null,
+        message: null
+    })
+
+    const errors = ref();
+    const showModal = ref(false);
+    const messageModal = ref();
+    const router = useRouter();
+
+    const sendMessage = async() => {
+        await axios.post('http://parrotpoo.test/message', formData)
+        .then(response => {
+            response.data.errors ? errors.value = response.data.errors : null;
+            if (response.data.code === 200) {
+                showModal.value = true
+                messageModal.value = response.data.message
+                for (let key in formData) {
+                    formData[key] = null;
+                }
+            }
+        })
+        .catch(e => {
+            console.error(e);
+        })
+    }
+
+    const closeModal = () => {
+        showModal.value ? showModal.value = false : showModal.value = true;
+        router.push('/');
+    }
 
 </script>
 
 <template>
     <main class="row">
+        <Modal :show="showModal" @close="closeModal()">
+            <p>{{ messageModal }}</p>
+            <button @click="closeModal()">Merci !</button>
+        </Modal>
         <div class="title col-10 col-sm-7 col-md-5">
             <h2>CONTACT</h2>
             <p>Envoyez nous votre demande avec vos coordonnées, notre équipe reviendra vers vous dans les meilleurs délais.</p>
@@ -15,34 +61,15 @@
         <form class="form col-8 col-sm-7 col-md-5">
             <Transition>
                 <div class="vehicle" v-if="isVisible">
-                    <p>Ma demande concerne le véhicule: <br> {{ vehicules.marque }} {{ vehicules.modele }} {{ vehicules.motorisation }}</p>
+                    <!-- <p>Ma demande concerne le véhicule: <br> {{ vehicules.marque }} {{ vehicules.modele }} {{ vehicules.motorisation }}</p> -->
                 </div>
             </Transition>
 
-            <div class="form__input">
-                <input class="form__field" @focusout="testCaracters()" v-model="name" type="text" name="nom" id="nom" placeholder="Votre nom">
-                <label class="form__label" for="nom">Votre nom</label>
-                <span class="form__input-alert" v-if="errorMessage">{{ errorMessage }}</span>
-            </div>
-            <div class="form__input">
-                <input class="form__field" @focusout="testCaracters()" v-model="surname" type="text" name="prenom" id="prenom" placeholder="Votre prénom">
-                <label class="form__label" for="prenom">Votre prénom</label>
-                <span class="form__input-alert" v-if="errorMessage">{{ errorMessage }}</span>
-            </div>
-            <div class="form__input">
-                <input class="form__field" @focusout="Portable_Valide(tel)" v-model="tel" type="tel" name="tel" id="tel" placeholder="Votre numéro de téléphone">
-                <label class="form__label" for="tel">Votre numéro de téléphone</label>
-                <span class="form__input-alert" v-if="numValide">*Numero invalide</span>
-            </div>
-            <div class="form__input">
-                <input class="form__field" @focusout="Mail_Valide(email)" v-model="email" type="email" name="email" id="email" placeholder="Votre adresse mail">
-                <label class="form__label" for="email">Votre adresse mail</label>
-                <span class="form__input-alert" v-if="mailValide">*Adresse invalide</span>
-            </div>
-            <div class="form__input">
-                <textarea rows="5" class="form__field" v-model="message" type="text" name="message" id="message" placeholder="Votre message"></textarea>
-                <label class="form__label" for="message">Votre message</label>
-            </div>
+            <InputText for="nom" type="text" content="Votre nom" :errors="errors" v-model="formData.nom"/>
+            <InputText for="prenom" type="text" content="Votre prenom" :errors="errors" v-model="formData.prenom"/>
+            <InputText for="num_telephone" type="tel" content="Votre numéro de téléphone" :errors="errors" v-model="formData.num_telephone"/>
+            <InputText for="mail" type="email" content="Votre adresse mail" :errors="errors" v-model="formData.mail"/>
+            <AreaText for="message" type="text" content="Votre message" :errors="errors" v-model="formData.message"/>
         </form>
         <button class="col-6 col-sm-4 col-md-3" @click="sendMessage()">Envoyer message</button>
     </main>
@@ -50,8 +77,12 @@
 
 <style lang="scss" scoped>
 
-    @import '../../../../scss/variable.scss';
-    @import '../../../../scss/mixins.scss';
+    @import '../../../../../scss/variable.scss';
+    @import '../../../../../scss/mixins.scss';
+
+.form {
+    margin: auto;
+}
 
 h2{
     @include h2-main;
@@ -83,91 +114,6 @@ transition: opacity 0.5s ease;
 .v-enter-from,
 .v-leave-to {
 opacity: 0;
-}
-
-.form {
-    margin: auto;
-
-    &__input {
-        display: flex;
-        flex-direction: column;
-        color: $orange-formular;
-        position: relative;
-        padding: 15px 0 0;
-        margin-top: 10px;
-
-        &-alert {
-            position: relative;
-            top: -3em;
-            width: 100%;
-            text-align: start;
-            font-size: 0.6em;
-            display: block;
-            margin: 0 auto;
-            color: red;
-            padding-left: 0.2em;
-        }
-    }
-    & p {
-        font-size: 1.1em;
-        margin-top: 1em;
-    }
-}
-
-.form__field {
-font-family: inherit;
-border: 0;
-width: 100%;
-border-bottom: 2px solid $orange-formular;
-outline: 0;
-font-size: 0.8em;
-color: $orange-formular;
-padding: 7px 0;
-background: transparent;
-transition: border-color 0.2s;
-margin: 0.2em auto;
-margin-bottom: 3em;
-
-    &::placeholder {
-        color: transparent;
-    }
-
-    &:placeholder-shown ~ .form__label {
-        font-size: 0.8em;
-        cursor: text;
-        top: 20px;
-    }
-}
-
-.form__label {
-position: absolute;
-top: 0;
-display: block;
-transition: 0.2s;
-font-size: 0.8em;
-color: $orange-formular;
-}
-
-.form__field:focus {
-~ .form__label {
-    position: absolute;
-    top: 0;
-    display: block;
-    transition: 0.2s;
-    font-size: 0.9em;
-    color: $primary-color;
-    font-weight:700;    
-}
-padding-bottom: 6px;  
-font-weight: 700;
-border-width: 3px;
-border-image: linear-gradient(to right, $orange-formular, $primary-color);
-border-image-slice: 1;
-}
-
-/* reset input */
-.form__field{
-&:required,&:invalid { box-shadow:none; }
 }
 
 .container__modal {

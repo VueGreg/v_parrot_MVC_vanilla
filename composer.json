@@ -10,7 +10,8 @@
             "Router\\": "Router",
             "Controllers\\": "app/Http/Controllers",
             "Request\\": "app/Http/Request",
-            "Actions\\": "app/Actions"
+            "Actions\\": "app/Actions",
+            "Exceptions\\": "app/Exceptions"
         }
     },
     "config": {

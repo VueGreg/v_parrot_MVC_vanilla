@@ -11,6 +11,7 @@ $router->get('/', ["Controllers\HomeController", "index"]);
 $router->get('/reparations', ["Controllers\RepairController", 'index']);
 $router->get('/vehicules', ["Controllers\VehiculeController", 'index']);
 $router->get('/contact', ["Controllers\ContactController", 'index']);
+$router->post('/message', ["Controllers\MessageController", 'store']);
 
 //Route Dashboard 
 

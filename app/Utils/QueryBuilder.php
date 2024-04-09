@@ -2,6 +2,7 @@
 
 namespace Utils;
 
+use Exceptions\CreateException;
 use PDO;
 
 class QueryBuilder
@@ -71,10 +72,11 @@ class QueryBuilder
     public function count(): self
     {
         $this->query .= "SELECT COUNT(*) AS count FROM {$this->tableName}";
+        $this->oneValue = true;
         return $this;
     }
 
-    public function create(array $data): self
+    public function create(array $data): bool
     {
         $columns = implode(", ", array_keys($data));
         $placeholders = ":" . implode(", :", array_keys($data));
@@ -85,7 +87,17 @@ class QueryBuilder
             $this->parameters[$column] = $value;
         }
 
-        return $this;
+        $statement = $this->pdo->prepare($this->getQuery());
+        foreach ($this->parameters as $column => $value) {
+            $statement->bindValue(":$column", $value);
+        }
+
+        if ($statement->execute()) {
+            $this->query = '';
+            return true;
+        }
+
+        throw new CreateException("La création a échoué en raison d'une erreur de validation.");
     }
 
     public function getQuery(): string
@@ -109,8 +121,6 @@ class QueryBuilder
         foreach ($this->parameters as $column => $value) {
             $statement->bindValue(":$column", $value);
         }
-        // var_dump($statement);
-        // die;
         if ($statement->execute()) {
             $this->query = '';
         }

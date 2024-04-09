@@ -29,7 +29,8 @@ class Router
 
             if (class_exists($className) && method_exists($className, $method)) {
                 $class = new $className();
-                return call_user_func_array([$class, $method], [$this->request->getParams() ?? null]);
+                $params = ($this->request->getMethod() == 'POST' && $this->request->getPost() !== null) ? $this->request->getPost() : $this->request->getParams();
+                return call_user_func_array([$class, $method], [$params ?? null]);
             }
         }
 
@@ -51,7 +52,6 @@ class Router
     {
         if ($this->request->getMethod() == 'POST' && $this->request->getPost()) {
             $this->routes[$path] = $action;
-            $this->setRoute($this->request->getUri(), $this->request->getPost());
         }
     }
 
