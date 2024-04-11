@@ -36,7 +36,7 @@
       <NavbarComponent :isConnect="isConnect"/>
     </div>
     <CarouselComponent class="reposition" />
-    <AppBarComponent />
+    <AppBarComponent :isConnect="isConnect"/>
     <slot name="content"></slot>
     <FooterComponent :data="data" />
 </template>

@@ -1,9 +1,18 @@
 <script setup>
 
     import LayoutView from '../../Layout/LayoutView.vue';
+    import Input from '../../components/tools/InputText.vue';
+    import { reactive } from 'vue';
 
-    defineProps({
+    const props = defineProps({
         data: Object
+    })
+
+    const formData = reactive({
+        adresse: props.data.informations.adresse,
+        code_postal: props.data.informations.code_postal,
+        ville: props.data.informations.ville,
+        num_telephone: props.data.informations.num_telephone,
     })
 
 </script>
@@ -12,7 +21,7 @@
     <LayoutView>
         <template #content>
         <main id="top">
-            <section class="row" v-for="information in informations">
+            <section class="row" v-for="information in data.informations">
                 <h2>INFORMATIONS GENERALE</h2>
                 <div class="title">
                     <div class="title__logo">
@@ -22,25 +31,25 @@
                 </div>
                 <form class="form col-9 col-xl-6">
                     <div class="form__input">
-                        <input class="form__field" v-model="models.adresse" type="text" name="adresse" id="adresse" placeholder="Adresse">
-                        <label class="form__label" for="nom">Adresse:</label>
+                        <Input for="adresse" type="text" :content="information.adresse" v-model="formData.adresse"/>
+                        <label class="form__label" for="adresse">Adresse</label>
                     </div>
                     <div class="form__group">
                         <div class="form__input col-5">
-                            <input class="form__field" v-model="models.postal" type="text" name="postal_code" id="postal_code" placeholder="Code postal">
+                            <Input for="code_postal" type="text" :content="information.code_postal" v-model="formData.code_postal"/>
                             <label class="form__label" for="postal_code">Code postal:</label>
                         </div>
                         <div class="form__input col-5">
-                            <input class="form__field" v-model="models.city" type="text" name="city" id="city" placeholder="Ville">
+                            <Input for="ville" type="text" :content="information.ville" v-model="formData.ville"/>
                             <label class="form__label" for="city">Ville:</label>
                         </div>
                     </div>
                     <div class="form__input">
-                        <input class="form__field" v-model="models.tel" type="tel" name="tel" id="tel" placeholder="Numéro de téléphone">
+                        <Input for="num_telephone" type="tel" :content="information.num_telephone" v-model="formData.num_telephone"/>
                         <label class="form__label" for="tel">Numéro de téléphone:</label>
                     </div>
                     <div class="form__input">
-                        <input class="form__field" v-model="models.mail" type="email" name="email" id="email" placeholder="E-mail">
+                        <Input for="mail" type="email" :content="information.mail" v-model="formData.mail"/>
                         <label class="form__label" for="email">E-mail:</label>
                     </div>
                     <button type="button" @click="changeBusinessSetting()">Modifier les informations</button>
@@ -49,24 +58,24 @@
             <section class="row">
                 <h2>HORAIRES D'OUVERTURE</h2>
                 <table class="col-9 col-xl-4">
-                    <tr v-for="horaire in horaires" :key="horaire.id">
+                    <tr v-for="horaire in data.horaires" :key="horaire.id">
                         <td>{{ horaire.jour_semaine }}</td>
                         <td>
                             <div class="form__input">
                                 <label class="form__label" :for="horaire.jour_semaine + 'Debut'">Début</label>
-                                <select :name="horaire.jour_semaine + 'Debut'" :id="horaire.jour_semaine + 'Debut'" v-model="horaireChange[horaire.id].debut">
+                                <!-- <select :name="horaire.jour_semaine + 'Debut'" :id="horaire.jour_semaine + 'Debut'" v-model="horaireChange[horaire.id].debut">
                                     <option>{{ horaireChange[horaire.id].debut }}</option>
                                     <option v-for="heure in horaire.list" :key="heure.id">{{ heure }}</option>
-                                </select>
+                                </select> -->
                             </div>
                         </td>
                         <td>
                             <div class="form__input">
                                 <label class="form__label" :for="horaire.jour_semaine + 'Fin'">Fin</label>
-                                <select :name="horaire.jour_semaine + 'Fin'" :id="horaire.jour_semaine + 'Fin'" v-model="horaireChange[horaire.id].fin">
+                                <!-- <select :name="horaire.jour_semaine + 'Fin'" :id="horaire.jour_semaine + 'Fin'" v-model="horaireChange[horaire.id].fin">
                                     <option>{{ horaireChange[horaire.id].fin }}</option>
                                     <option v-for="heure in horaire.list" :key="heure.id">{{ heure }}</option>
-                                </select>
+                                </select> -->
                             </div>
                         </td>
                     </tr>
@@ -81,7 +90,7 @@
                         <span>  AJOUTER</span>
                     </button>
                 </a>
-                <div class="message col-9 col-xl-4" v-for="reparation in reparations" :key="reparation.id" @click="showOptions(reparation.id)">
+                <div class="message col-9 col-xl-4" v-for="reparation in data.reparations" :key="reparation.id" @click="showOptions(reparation.id)">
                     <div class="message__element">
                         <p class="message__element-title">Catégorie:</p>
                         <p class="message__element-result">{{ reparation.categorie }}</p>

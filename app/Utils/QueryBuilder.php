@@ -63,8 +63,13 @@ class QueryBuilder
         return $this;
     }
 
-    public function select(string $columns): self
+    public function select(string $columns = null): self
     {
+        if (!$columns) {
+            $this->query .= "SELECT * FROM {$this->tableName}";
+            return $this;
+        }
+        
         $this->query .= "SELECT $columns FROM {$this->tableName}";
         return $this;
     }
@@ -152,6 +157,9 @@ class QueryBuilder
         foreach ($this->parameters as $column => $value) {
             $statement->bindValue(":$column", $value);
         }
+
+        // var_dump($this->query);
+        // die;
         if ($statement->execute()) {
             $this->query = '';
         }

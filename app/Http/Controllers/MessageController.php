@@ -5,9 +5,24 @@ namespace Controllers;
 use Models\MessagesModel;
 use Request\RequestMessage;
 use Utils\Controller;
+use Utils\Model;
 
 class MessageController extends Controller
 {
+    public function index()
+    {
+        $model = new MessagesModel();
+        $messages = $model->all();
+        $count = $model->query()->count()->where('status', "=", 0);
+
+        $data = [
+            "count" => $count,
+            "messages" => $messages
+        ];
+
+        $this->view('dashboard/message', $data);
+    }
+
     public function store(RequestMessage $request)
     {
         header('Content-Type: Application/json');

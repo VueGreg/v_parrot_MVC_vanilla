@@ -17,6 +17,9 @@ $router->post('/connexion', ["Controllers\UtilisateurController", 'login']);
 
 //Route Dashboard 
 $router->get('/dashboard/parametre', ["Controllers\ParametreController", 'index'])->auth();
+$router->get('/dashboard/temoignage', ["Controllers\TemoignageController", 'index'])->auth();
+$router->get('/dashboard/employe', ["Controllers\EmployeController", 'index'])->auth();
+$router->get('/dashboard/message', ["Controllers\MessageController", 'index'])->auth();
 
 //Route API
 $router->get('/filtre', ["Controllers\FilterAPIController", "getAll"]);

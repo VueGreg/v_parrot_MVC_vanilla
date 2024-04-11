@@ -9,7 +9,7 @@ class Auth
 {
     public function verify($path): bool
     {
-        if ($path === '/dashboard/parametre') {
+        if ($path === '/dashboard/parametre' || $path === '/dashboard/temoignage' || $path === 'dashboard/employe' || $path === 'dashboard/message') {
 
             if (session_status() !== PHP_SESSION_ACTIVE) {
                 session_start();

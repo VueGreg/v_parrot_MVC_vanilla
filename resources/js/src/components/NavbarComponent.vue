@@ -1,7 +1,12 @@
 <script setup>
 
-    import LinkPOO from './LinkPOO.vue';
+    import Link from './LinkPOO.vue';
     import { RouterLink } from 'vue-router';
+    import { ref } from 'vue';
+
+    const isPublic = ref(true)
+
+    !window.location.href.includes('dashboard') ? isPublic.value = true : isPublic.value = false;
 
     defineProps({
         isConnect: Boolean
@@ -11,22 +16,27 @@
 
 
 <template>
-    <nav class="navbar navbar-expand-lg navbar-expand-sm navbar-dark nav__navigate" v-if="!isConnect">
-    <div class="container-fluid">
-            <RouterLink class="nav__navigate-link" activeClass="active" to="/">Acceuil</RouterLink>
-            <RouterLink class="nav__navigate-link" activeClass="active" to="/reparations">Reparation</RouterLink>
-            <RouterLink class="nav__navigate-link" activeClass="active" to="/vehicules">Véhicules d'occasion</RouterLink>
-        <button class="nav__navigate-btn navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <RouterLink class="nav__navigate-link" activeClass="active" to="/contact">Contact</RouterLink>
-                <!-- <LinkPOO class="nav__navigate-link" to="/dashboard/messages" v-if="isConnect">Tableau de bord</LinkPOO> -->
+    <nav class="navbar navbar-expand-lg navbar-expand-sm navbar-dark nav__navigate" v-if="isConnect && !isPublic">
+        <div class="container-fluid">
+            <Link class="nav__navigate-link" to="http://parrotpoo.test">Retour sur le site</Link>
+        </div>
+    </nav>
+    <nav class="navbar navbar-expand-lg navbar-expand-sm navbar-dark nav__navigate" v-if="isPublic">
+        <div class="container-fluid">
+                <RouterLink class="nav__navigate-link" activeClass="active" to="/">Acceuil</RouterLink>
+                <RouterLink class="nav__navigate-link" activeClass="active" to="/reparations">Reparation</RouterLink>
+                <RouterLink class="nav__navigate-link" activeClass="active" to="/vehicules">Véhicules d'occasion</RouterLink>
+            <button class="nav__navigate-btn navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav">
+                    <RouterLink class="nav__navigate-link" activeClass="active" to="/contact">Contact</RouterLink>
+                    <Link class="nav__navigate-link" to="http://parrotpoo.test/dashboard/message" v-if="isConnect">Tableau de bord</Link>
+                </div>
             </div>
         </div>
-    </div>
-</nav>
+    </nav>
 </template>
 
 <style lang="scss" scoped>

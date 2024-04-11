@@ -1,34 +1,40 @@
 <script setup>
 
+    import Link from './LinkPOO.vue';
+
+    defineProps({
+        isConnect: Boolean
+    })
+
 </script>
 
 <template>
-    <nav class="row" v-if="isConnect && path != '/connexion' && path != '/erreur'" :class="{ 'appBar' : isConnect }">
+    <nav class="row" v-if="isConnect">
         <div class="bar col-10 col-sm-8 m-auto">
-            <RouterLink class="link" to="/dashboard/utilisateurs" v-if="rank<2">
-                <div class="bar__btn" :class="{'active': path == '/dashboard/utilisateurs'}">
+            <Link class="link" to="http://parrotpoo.test/dashboard/employe">
+                <div class="bar__btn">
                     <i class="fa-solid fa-users"></i>
                     <div class="bar__btn-indicator">
                         <span>{{ countUsers }}</span>
                     </div>
                     <h5 v-if="isConnect">EMPLOYES</h5>
                 </div>
-            </RouterLink>
-            <RouterLink class="link" to="/dashboard/parametre" v-if="rank<2">
-                <div class="bar__btn" :class="{'active': path == '/dashboard/parametre'}">
+            </Link>
+            <Link class="link" to="http://parrotpoo.test/dashboard/parametre">
+                <div class="bar__btn">
                     <i class="fa-solid fa-gear"></i>
                     <h5 v-if="isConnect">INFORMATIONS ENTREPRISE</h5>
                 </div>
-            </RouterLink>
-            <RouterLink class="link" to="/dashboard/messages">
-                <div class="bar__btn" :class="{'active': path =='/dashboard/messages'}">
+            </Link>
+            <Link class="link" to="http://parrotpoo.test/dashboard/message">
+                <div class="bar__btn">
                     <i class="fa-solid fa-message"></i>
                     <div class="bar__btn-indicator">
                         <span>{{ countMessages }}</span>
                     </div>
                     <h5 v-if="isConnect">MESSAGES CLIENTS</h5>
                 </div>
-            </RouterLink>
+            </Link>
             <RouterLink class="link" to="/annonces">
                 <div class="bar__btn" :class="{'active': path =='/annonces'}"> 
                     <i class="fa-solid fa-car"></i>
@@ -38,15 +44,15 @@
                     <h5 v-if="isConnect">PARC AUTOMOBILE</h5>
                 </div>
             </RouterLink>
-            <RouterLink class="link" to="/dashboard/temoignage" v-if="rank<3">
-                <div class="bar__btn" :class="{'active': path =='/dashboard/temoignage'}"> 
+            <Link class="link" to="http://parrotpoo.test/dashboard/temoignage">
+                <div class="bar__btn"> 
                     <i class="fa-regular fa-comment-dots"></i>
                     <div class="bar__btn-indicator">
                         <span>{{ countTestimony }}</span>
                     </div>
                     <h5 v-if="isConnect">TEMOIGNAGES</h5>
                 </div>
-            </RouterLink>
+            </Link>
         </div>
     </nav>
     <nav class="row" v-else-if="path != '/connexion' && path != '/erreur'">
