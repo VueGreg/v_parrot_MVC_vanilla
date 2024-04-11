@@ -100,6 +100,37 @@ class QueryBuilder
         throw new CreateException("La création a échoué en raison d'une erreur de validation.");
     }
 
+    public function update(Array $set, int $id): bool
+    {
+        $this->query .= "UPDATE {$this->tableName} SET ";
+
+        if (is_array($set)) {
+            foreach ($set as $column => $value) {
+                $this->parameters[$column] = $value;
+                $this->query .= "{$column} = :{$column},";
+            }
+        }
+
+        $this->query = rtrim($this->query, ', ');
+
+        if (isset($id)) {
+            $this->parameters['id'] = $id;
+            $this->query .= " WHERE id = :id";
+        }
+
+        $statement = $this->pdo->prepare($this->getQuery());
+        foreach ($this->parameters as $column => $value) {
+            $statement->bindValue(":$column", $value);
+        }
+
+        if ($statement->execute()) {
+            $this->query = '';
+            return true;
+        }
+
+        throw new CreateException("La modification à échoué en raison d'une erreur de validation.");
+    }
+
     public function getQuery(): string
     {
         return $this->query;

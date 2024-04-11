@@ -35,6 +35,7 @@ class ComposerStaticInitd045212f6055750cad8473fbb246b23c
         'M' => 
         array (
             'Models\\' => 7,
+            'Middleware\\' => 11,
         ),
         'G' => 
         array (
@@ -91,6 +92,10 @@ class ComposerStaticInitd045212f6055750cad8473fbb246b23c
         array (
             0 => __DIR__ . '/../..' . '/app/Models',
         ),
+        'Middleware\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/app/Http/Middleware',
+        ),
         'GrahamCampbell\\ResultType\\' => 
         array (
             0 => __DIR__ . '/..' . '/graham-campbell/result-type/src',
@@ -119,8 +124,9 @@ class ComposerStaticInitd045212f6055750cad8473fbb246b23c
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Controllers\\FilterAPIController' => __DIR__ . '/../..' . '/app/Http/Controllers/FilterAPIController.php',
         'Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
-        'Controllers\\LoginController' => __DIR__ . '/../..' . '/app/Http/Controllers/LoginController.php',
         'Controllers\\MessageController' => __DIR__ . '/../..' . '/app/Http/Controllers/MessageController.php',
+        'Controllers\\TestController' => __DIR__ . '/../..' . '/app/Http/Controllers/TestController.php',
+        'Controllers\\UtilisateurController' => __DIR__ . '/../..' . '/app/Http/Controllers/UtilisateurController.php',
         'Controllers\\_404Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/_404Controller.php',
         'Dotenv\\Dotenv' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Dotenv.php',
         'Dotenv\\Exception\\ExceptionInterface' => __DIR__ . '/..' . '/vlucas/phpdotenv/src/Exception/ExceptionInterface.php',
@@ -167,6 +173,7 @@ class ComposerStaticInitd045212f6055750cad8473fbb246b23c
         'GrahamCampbell\\ResultType\\Error' => __DIR__ . '/..' . '/graham-campbell/result-type/src/Error.php',
         'GrahamCampbell\\ResultType\\Result' => __DIR__ . '/..' . '/graham-campbell/result-type/src/Result.php',
         'GrahamCampbell\\ResultType\\Success' => __DIR__ . '/..' . '/graham-campbell/result-type/src/Success.php',
+        'Middleware\\Auth' => __DIR__ . '/../..' . '/app/Http/Middleware/Auth.php',
         'Models\\AnnoncesModel' => __DIR__ . '/../..' . '/app/Models/AnnoncesModel.php',
         'Models\\EnergiesModel' => __DIR__ . '/../..' . '/app/Models/EnergiesModel.php',
         'Models\\EntrepriseModel' => __DIR__ . '/../..' . '/app/Models/EntrepriseModel.php',
@@ -186,8 +193,9 @@ class ComposerStaticInitd045212f6055750cad8473fbb246b23c
         'PhpOption\\Option' => __DIR__ . '/..' . '/phpoption/phpoption/src/PhpOption/Option.php',
         'PhpOption\\Some' => __DIR__ . '/..' . '/phpoption/phpoption/src/PhpOption/Some.php',
         'PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/PhpToken.php',
-        'Request\\RequestAnnonces' => __DIR__ . '/../..' . '/app/Http/Request/RequestAnnonces.php',
+        'Request\\RequestAnnonce' => __DIR__ . '/../..' . '/app/Http/Request/RequestAnnonce.php',
         'Request\\RequestMessage' => __DIR__ . '/../..' . '/app/Http/Request/RequestMessage.php',
+        'Request\\RequestUtilisateur' => __DIR__ . '/../..' . '/app/Http/Request/RequestUtilisateur.php',
         'Router\\Router' => __DIR__ . '/../..' . '/Router/Router.php',
         'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
         'Symfony\\Polyfill\\Ctype\\Ctype' => __DIR__ . '/..' . '/symfony/polyfill-ctype/Ctype.php',

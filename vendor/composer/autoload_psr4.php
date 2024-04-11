@@ -14,6 +14,7 @@ return array(
     'Request\\' => array($baseDir . '/app/Http/Request'),
     'PhpOption\\' => array($vendorDir . '/phpoption/phpoption/src/PhpOption'),
     'Models\\' => array($baseDir . '/app/Models'),
+    'Middleware\\' => array($baseDir . '/app/Http/Middleware'),
     'GrahamCampbell\\ResultType\\' => array($vendorDir . '/graham-campbell/result-type/src'),
     'Exceptions\\' => array($baseDir . '/app/Exceptions'),
     'Dotenv\\' => array($vendorDir . '/vlucas/phpdotenv/src'),

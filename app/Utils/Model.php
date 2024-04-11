@@ -3,8 +3,10 @@
 namespace Utils;
 
 use PDO;
+use stdClass;
 use PDOException;
 use Dotenv\Dotenv;
+use LDAP\Result;
 use Utils\QueryBuilder;
 use Utils\TableRelationship;
 
@@ -27,6 +29,7 @@ class Model
             $this->pdo = new PDO("mysql:host=".$_ENV["DB_HOST"].";dbname=".$_ENV["DB_NAME"], $_ENV["DB_USERNAME"], $_ENV["DB_PASSWORD"]);
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->pdo->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
+            $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
             $this->queryBuilder = new QueryBuilder($this->tableName, $this->pdo);
 
         } catch (PDOException $e) {
@@ -46,13 +49,15 @@ class Model
         return $this->queryBuilder;
     }
 
-    public function all(): array
+    public function all(): Array
     {
         $query = "SELECT * FROM {$this->tableName}";
         $statement = $this->pdo->prepare($query);
+        $className = 'Models\\' .$this->tableName . 'Model';
+        $statement->setFetchMode(PDO::FETCH_CLASS, $className);
 
         if ($statement->execute()) {
-            $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+           $results = $statement->fetchAll();
 
             foreach ($results as &$row) {
                 foreach ($row as $key => &$value) {
@@ -61,19 +66,40 @@ class Model
                     }
                 }
             }
-
             return $results;
         } else {
             return [];
         }
     }
 
-    public function find(int $id)
+    public function find(int $id): Model
     {
-        $query = "SELECT * FROM {$this->tableName} WHERE id = ?";
+        $query = "SELECT * FROM {$this->tableName} WHERE id = :id";
         $statement = $this->pdo->prepare($query);
-        $statement->execute([$id]);
-        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        $className = 'Models\\' .$this->tableName . 'Model';
+        $statement->setFetchMode(PDO::FETCH_CLASS, $className);
+        $statement->bindValue(':id', $id, PDO::PARAM_STR);
+        if($statement->execute()){
+            $result = $statement->fetch();
+        } else return null;
+    
+        if ($result) {
+            return $result;
+        } else {
+            return null;
+        }
+    }
+
+    public function findByToken(string $token): Model
+    {
+        $query = "SELECT * FROM {$this->tableName} WHERE token = :token";
+        $statement = $this->pdo->prepare($query);
+        $className = 'Models\\' .$this->tableName . 'Model';
+        $statement->setFetchMode(PDO::FETCH_CLASS, $className);
+        $statement->bindValue(':token', $token, PDO::PARAM_STR);
+        if($statement->execute()){
+            $result = $statement->fetch();
+        } else return null;
     
         if ($result) {
             return $result;

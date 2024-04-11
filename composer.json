@@ -11,7 +11,8 @@
             "Controllers\\": "app/Http/Controllers",
             "Request\\": "app/Http/Request",
             "Actions\\": "app/Actions",
-            "Exceptions\\": "app/Exceptions"
+            "Exceptions\\": "app/Exceptions",
+            "Middleware\\": "app/Http/Middleware"
         }
     },
     "config": {

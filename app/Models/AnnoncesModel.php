@@ -2,8 +2,8 @@
 
 namespace Models;
 
+use Request\RequestAnnonce;
 use Utils\Model;
-use Request\RequestAnnonces;
 
 class AnnoncesModel extends Model
 {
@@ -12,11 +12,10 @@ class AnnoncesModel extends Model
        return $this->relationships()->has(['energies', 'vehicules'], true)->hasMany('images', 'galeries', false, 1);
     }
 
-    public function store(array $data)
+    public function store(RequestAnnonce $request)
     {
-        $request = new RequestAnnonces();
-        if($request->validation($data)){
-            $this->query()->create($data);
+        if($request->validation($request->getPost())){
+            $this->query()->create($request->getPost());
         }
     }
 }

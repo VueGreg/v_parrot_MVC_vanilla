@@ -1,6 +1,29 @@
 <script setup>
 
-    import LinkPOO from './LinkPOO.vue';
+    import Link from '../components/LinkPOO.vue';
+    import axios from 'axios';
+    import store from '../store';
+
+    defineProps({
+        isConnect: Boolean
+    })
+
+    const logout = async() => {
+        await axios.get('http://parrotpoo.test/deconnexion')
+        .then(response => {
+            console.log(response.data)
+            if (response.data.isConnect) {
+                store.dispatch('updateIsConnect', false);
+            }
+
+            if (response.data.url) {
+                window.location.href = response.data.url
+            }
+        })
+        .catch(e => {
+            console.error(e)
+        })
+    }
 
 </script>
 
@@ -32,18 +55,18 @@
             </a>
 
             <!--Connection btn-->
-            <div class="navigate-link button__header" v-if="isConnect" @click="removeCookie()">
+            <div class="navigate-link button__header" v-if="isConnect" @click.prevent="logout()">
                 <div class="button__header-circle">
                     <i class="fa-solid fa-arrow-right-to-bracket" style="color: #ffffff;"></i>
                 </div>
                 <p class="button__header-text">Déconnexion</p>
             </div>
-            <!-- <RouterLink class="navigate-link button__header" to="/connexion" v-else>
+            <Link class="navigate-link button__header" to="http://parrotpoo.test/connexion" v-else>
                 <div class="button__header-circle">
                     <i class="fa-solid fa-arrow-right-to-bracket" style="color: #ffffff;"></i>
                 </div>
                 <p class="button__header-text">Connexion</p>
-            </RouterLink> -->
+            </Link>
         </div>
     </header>
 

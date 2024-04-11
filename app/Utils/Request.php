@@ -4,25 +4,30 @@ namespace Utils;
 
 class Request
 {
+
     private $method;
     private $uri;
     private $params = [];
     private $post = [];
     private $className;
 
-    public function __construct()
+    public function __construct($method, $uri, $queryParams, $postData)
     {
-        $this->method = $_SERVER["REQUEST_METHOD"] ?? '';
-        $this->uri = $_SERVER["REQUEST_URI"] ?? '';
-        $this->getQueryParams($_GET);
-        $this->parsePostData();
+        $this->method = $method;
+        $this->uri = $uri;
+        $this->params = $queryParams;
+        $this->post = $postData;
         $this->className = explode('\\', get_called_class());
     }
 
-    private function parsePostData()
+    public static function createFromGlobals()
     {
-        $postData = file_get_contents('php://input');
-        $this->post = json_decode($postData, true) ?: [];
+        $method = $_SERVER["REQUEST_METHOD"] ?? '';
+        $uri = $_SERVER["REQUEST_URI"] ?? '';
+        $queryParams = $_GET;
+        $postData = json_decode(file_get_contents('php://input'), true) ?: [];
+
+        return new self($method, $uri, $queryParams, $postData);
     }
 
     public function getMethod() 
@@ -33,11 +38,6 @@ class Request
     public function getUri()
     {
         return $this->uri;
-    }
-
-    private function getQueryParams($params)
-    {
-        $this->params = $params;
     }
 
     public function getParams()
@@ -54,7 +54,10 @@ class Request
         }
     }
 
-
+    public function getClassName()
+    {
+        return $this->className;
+    }
 
     //Rules supported
     // required, unique, string, tel, email, text, ...

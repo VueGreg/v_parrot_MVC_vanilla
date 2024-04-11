@@ -22,7 +22,7 @@ class HomeController extends Controller
         $horaires = new HorairesModel();
         $changeHoraire = $horaires->all();
         $newHoraires = new ChangeHoraireFormat();
-        $json['horaires'] = $newHoraires->changeHoraire($changeHoraire);
+        $json['horaires'] = $changeHoraire; //$newHoraires->changeHoraire($changeHoraire);
 
         $entreprise = new EntrepriseModel();
         $json['informations'] = $entreprise->all();

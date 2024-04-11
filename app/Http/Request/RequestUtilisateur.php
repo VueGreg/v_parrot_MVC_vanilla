@@ -4,13 +4,13 @@ namespace Request;
 
 use Utils\Request;
 
-class RequestAnnonces extends Request
+class RequestUtilisateur extends Request
 {
     public function validation(array $data): array|bool
     {
         $rules = [
-            'id_vehicules' => 'required, unique, int',
-            'id_energies' => 'required, unique, int'
+            'mail' => 'required, email',
+            'mdp' => 'required'
         ];
 
         return $this->validate($data, $rules);

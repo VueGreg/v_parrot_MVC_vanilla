@@ -9,6 +9,7 @@
   
     const store = useStore();
     const data = computed(() => store.getters.layoutData);
+    const isConnect = computed(() => store.getters.isConnect);
     const fantomeTop = ref(0);
 
     const handleScroll = () => {
@@ -31,8 +32,8 @@
 
 <template>
     <div class="fix fantome" :style="{ top: fantomeTop + 'vh' }">
-      <HeaderComponent/>
-      <NavbarComponent/>
+      <HeaderComponent :isConnect="isConnect"/>
+      <NavbarComponent :isConnect="isConnect"/>
     </div>
     <CarouselComponent class="reposition" />
     <AppBarComponent />

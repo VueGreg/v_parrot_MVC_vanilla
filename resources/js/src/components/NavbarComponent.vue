@@ -3,11 +3,15 @@
     import LinkPOO from './LinkPOO.vue';
     import { RouterLink } from 'vue-router';
 
+    defineProps({
+        isConnect: Boolean
+    })
+
 </script>
 
 
 <template>
-    <nav class="navbar navbar-expand-lg navbar-expand-sm navbar-dark nav__navigate">
+    <nav class="navbar navbar-expand-lg navbar-expand-sm navbar-dark nav__navigate" v-if="!isConnect">
     <div class="container-fluid">
             <RouterLink class="nav__navigate-link" activeClass="active" to="/">Acceuil</RouterLink>
             <RouterLink class="nav__navigate-link" activeClass="active" to="/reparations">Reparation</RouterLink>

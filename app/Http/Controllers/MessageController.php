@@ -8,26 +8,28 @@ use Utils\Controller;
 
 class MessageController extends Controller
 {
-    public function store(Array $request)
+    public function store(RequestMessage $request)
     {
         header('Content-Type: Application/json');
-        $request = new RequestMessage();
 
-        if ($request->validation($request->getPost()) === true) {
-            $data = $request->getPost();
+        $postData = $request->getPost();
+        $validationResult = $request->validation($postData);
+
+        if ($validationResult === true) {
+            $data = $postData;
             $data['date'] = date('Y-m-d H:i:s');
             $data['status'] = 1;
 
             $message = new MessagesModel();
             $message->query()->create($data);
 
-            $validation['code'] = 200;
-            $validation['message'] = "Le message à bien été reçu";
-            echo json_encode($validation);
-        }else {
-            $errors = $request->validation($request->getPost());
-            echo json_encode($errors);
+            $response['code'] = 200;
+            $response['message'] = "Le message a bien été reçu";
+        } else {
+            $response['code'] = 400;
+            $response['errors'] = $validationResult; // On récupère directement les erreurs de validation
         }
-        
+
+        echo json_encode($response);
     }
 }
