@@ -10,8 +10,10 @@ class Controller
     public function view(string $filename, array $datas = [], bool $hasRouter = false)
     {
         $path = "../resources/views/index.php";
+        $csrf = null;
+        $auth = new Auth();
 
-        if ((new Auth())->verify($filename)) {
+        if ($auth->verify($filename) && !$auth->getPageVitrine()) {
             $csrf = new CrossSiteRequestForgery();
             $csrf->generateCSRFToken();
         }
@@ -20,7 +22,7 @@ class Controller
             'filename' => $filename,
             'datas' => $datas,
             'hasRouter' => $hasRouter,
-            'csrf_token' => $csrf->getCSRFToken()
+            'csrf_token' => ($csrf !== null) ? $csrf->getCSRFToken() : null
         );
         
         if (file_exists($path)) {

@@ -1,13 +1,22 @@
 <script setup>
 
     import LayoutView from '../../Layout/LayoutView.vue';
-    import { ref } from 'vue';
+    import useMessage from './services/_message';
+    import { ref, reactive, TransitionGroup } from 'vue';
 
-    defineProps({
+    const props = defineProps({
         data: Object
     })
 
     const activeItem = ref()
+
+    const { checkMessage, errors, responseData } = useMessage();
+
+    const formData = reactive({
+        id: null,
+    })
+
+    const messageData = ref(props.data);
 
     const showOptions = (index) => {
         if (activeItem.value === index) {
@@ -15,6 +24,13 @@
         }else
         activeItem.value = index
     }
+
+    const messageCheck = async(id) => {
+        formData.id = id;
+        await checkMessage(formData);
+        messageData.value = responseData.value
+    }
+
 
 </script>
 
@@ -70,7 +86,7 @@
                     <div class="table__header col-md-10 col-lg-8">
                         <div class="table__header-head">
                             <h5>Messages clients</h5>
-                            <h6>{{ data.count }}</h6>
+                            <h5>{{ messageData.count }}</h5>
                         </div>
                         <div class="table__header-cat">
                             <h6 class="elem elem1">Nom</h6>
@@ -80,7 +96,8 @@
                             <h6 class="elem elem5">Message</h6>
                         </div>
                     </div>
-                    <div class="table__body col-md-10 col-lg-8" v-for="message in data.messages" :key="message.id" @click="showOptions(message.id)">
+                    <TransitionGroup name="slide-fade">
+                    <div class="table__body col-md-10 col-lg-8" v-for="message in messageData.messages" :key="message.id" @click="showOptions(message.id)">
                         <div class="table__body-elem">
                             <span class="elem elem1">{{ message.nom }}</span>
                             <span class="elem elem2">{{ message.prenom }}</span>
@@ -90,21 +107,22 @@
                             </RouterLink>
                             <span class="elem elem5">{{ message.message }}</span>
                         </div>
-                            <div class="message__option" :class="{ active: message.id === activeItem }">
-                                <div class="message__option-btn" @click="call(message.id)">
-                                    <i class="fa-solid fa-phone"></i>
-                                    <span>Appeler</span>
-                                </div>
-                                <div class="message__option-btn">
-                                    <i class="fa-solid fa-at"></i>
-                                    <span>Envoyer un mail</span>
-                                </div>
-                                <div class="message__option-btn" @click="messageCheck($event, message.id)">
-                                    <i class="fa-regular fa-circle-check"></i>
-                                    <span>Message traité</span>
-                                </div>
+                        <div class="message__option" :class="{ active: message.id === activeItem }">
+                            <div class="message__option-btn" @click="call(message.id)">
+                                <i class="fa-solid fa-phone"></i>
+                                <span>Appeler</span>
                             </div>
+                            <div class="message__option-btn">
+                                <i class="fa-solid fa-at"></i>
+                                <span>Envoyer un mail</span>
+                            </div>
+                            <div class="message__option-btn" @click="messageCheck(message.id)">
+                                <i class="fa-regular fa-circle-check"></i>
+                                <span>Message traité</span>
+                            </div>
+                        </div>
                     </div>
+                    </TransitionGroup>
                 </div>
             </section>
         </template>
@@ -115,6 +133,16 @@
 
     @import '../../../../scss/variable.scss';
     @import '../../../../scss/mixins.scss';
+
+    /* ---- Transition group ---- */
+    .slide-fade-enter-active, .slide-fade-leave-active {
+        transition: all 0.3s ease-out;
+    }
+
+    .slide-fade-enter-from, .slide-fade-leave-to {
+        opacity: 0;
+        transform: translateY(20px);
+    }
 
     main {
         margin-top: 3em;
@@ -166,6 +194,7 @@
             padding-top: 1.5em;
             opacity: 0;
             transition: opacity 1s ease-in-out;
+            cursor: pointer;
 
             &-btn {
                 border: 2px solid $primary-color;
@@ -200,15 +229,10 @@
         margin: 2em auto;
         margin-bottom: 5em;
 
-        h5{
+        h5,
+        h6 {
             color: $primary-color;
             margin-bottom: 2em;
-        }
-
-        h6 {
-            margin: 0;
-            font-size: 1.2em;
-            color: $color-text-dark;
         }
 
         &__header {
@@ -297,31 +321,6 @@
         display: flex;
         opacity: 1;
         transition: opacity 1s ease-in-out;
-    }
-
-    .v-enter-active,
-    .v-leave-active {
-    transition: all 0.75s ease-out;
-    }
-
-    .v-enter-to {
-    height: auto;
-    opacity: 1;
-    }
-
-    .v-enter-from {
-    height: 0;
-    opacity: 0;
-    }
-
-    .v-leave-to {
-    height: auto;
-    opacity: 0;
-    }
-
-    .v-leave-from {
-    height: auto;
-    opacity: 1;
     }
 
     @media screen and (min-width: 768px) {

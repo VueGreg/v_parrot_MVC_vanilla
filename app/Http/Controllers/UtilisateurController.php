@@ -32,7 +32,9 @@ class UtilisateurController extends Controller
         $model = new UtilisateursModel();
         $utilisateurs = $model->all();
 
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
 
         foreach ($utilisateurs as $utilisateur) {
             if ($utilisateur->mail == $email && password_verify($password, $utilisateur->mdp)) {
@@ -61,7 +63,9 @@ class UtilisateurController extends Controller
     {
         header('Content-Type: application/json');
 
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
 
         if (session_status() === PHP_SESSION_ACTIVE && isset($_SESSION['user_token'])) {
 
@@ -89,5 +93,22 @@ class UtilisateurController extends Controller
         ]);
         session_destroy();
         setcookie(session_name(), '', time() - 3600, '/');
+    }
+
+    public function isConnect()
+    {
+        header('Content-Type: application/json');
+
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        if (session_status() === PHP_SESSION_ACTIVE && isset($_SESSION['user_token'])) {
+            echo json_encode(true);
+            return;
+        }
+
+        echo json_encode(false);
+        return;
     }
 }

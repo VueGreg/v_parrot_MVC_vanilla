@@ -14,6 +14,7 @@ $router->post('/message', ["Controllers\MessageController", 'store']);
 $router->get('/connexion', ["Controllers\UtilisateurController", 'index']);
 $router->get('/deconnexion', ["Controllers\UtilisateurController", 'logout']);
 $router->post('/connexion', ["Controllers\UtilisateurController", 'login']);
+$router->get('/isconnect', ["Controllers\UtilisateurController", 'isConnect']);
 
 //Route Dashboard 
 $router->get('/dashboard/parametre', ["Controllers\ParametreController", 'index'])->auth();
@@ -23,7 +24,9 @@ $router->put('/dashboard/temoignage', ["Controllers\TemoignageController", 'upda
 $router->delete('/dashboard/temoignage', ["Controllers\TemoignageController", 'delete'])->auth();
 
 $router->get('/dashboard/employe', ["Controllers\EmployeController", 'index'])->auth();
+
 $router->get('/dashboard/message', ["Controllers\MessageController", 'index'])->auth();
+$router->put('/dashboard/message', ["Controllers\MessageController", 'update'])->auth();
 
 //Route API
 $router->get('/filtre', ["Controllers\FilterAPIController", "getAll"]);

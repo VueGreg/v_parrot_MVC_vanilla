@@ -7,11 +7,23 @@
     import { useStore } from 'vuex';
     import { computed, ref, onMounted, onUnmounted } from 'vue';
     import axios from 'axios';
-  
+
     const store = useStore();
     const data = computed(() => store.getters.layoutData);
-    const isConnect = computed(() => store.getters.isConnect);
     const fantomeTop = ref(0);
+    const isConnect = ref(false);
+
+    const checkSession = async() => {
+      try {
+        const response = await axios.get('http://parrotpoo.test/isconnect');
+        if (response.data) {
+          isConnect.value = response.data
+        } else isConnect.value = response.data
+      } catch (error) {
+        console.error(error);
+        isConnect.value = false;
+      }
+    }
 
     const handleScroll = () => {
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
@@ -22,7 +34,8 @@
       }
     };
   
-    onMounted(() => {
+    onMounted(async() => {
+      await checkSession()
       window.addEventListener('scroll', handleScroll);
     });
   

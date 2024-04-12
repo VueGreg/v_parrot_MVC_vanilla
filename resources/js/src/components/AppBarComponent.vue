@@ -2,9 +2,9 @@
 
     import Link from './LinkPOO.vue';
 
-    defineProps({
+    const props = defineProps({
         isConnect: Boolean
-    })
+    });
 
 </script>
 

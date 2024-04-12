@@ -8,9 +8,9 @@
 
     !window.location.href.includes('dashboard') ? isPublic.value = true : isPublic.value = false;
 
-    defineProps({
+    const props = defineProps({
         isConnect: Boolean
-    })
+    });
 
 </script>
 

@@ -20,9 +20,8 @@ Promise.all([Page]).then(([Page]) => {
 
   if (csrf_token) {
     store.dispatch('updateCsrf', csrf_token);
-  }
-
     createApiWithCsrfToken();
+  }
 
     if (hasRouter == 1) {
       import('./pages/vitrine/router').then(routerModule => {

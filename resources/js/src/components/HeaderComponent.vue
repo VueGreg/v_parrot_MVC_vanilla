@@ -1,30 +1,25 @@
 <script setup>
-
     import Link from '../components/LinkPOO.vue';
+    import { computed } from 'vue';
     import axios from 'axios';
-    import store from '../store';
 
-    defineProps({
+    const props = defineProps({
         isConnect: Boolean
-    })
+    });
 
-    const logout = async() => {
-        await axios.get('http://parrotpoo.test/deconnexion')
-        .then(response => {
-            console.log(response.data)
+    const logout = async () => {
+        try {
+            const response = await axios.get('http://parrotpoo.test/deconnexion');
             if (response.data.isConnect) {
-                store.dispatch('updateIsConnect', false);
+                localStorage.removeItem('_csrf');
             }
-
             if (response.data.url) {
-                window.location.href = response.data.url
+                window.location.href = response.data.url;
             }
-        })
-        .catch(e => {
-            console.error(e)
-        })
-    }
-
+        } catch (error) {
+            console.error(error);
+        }
+    };
 </script>
 
 <template>

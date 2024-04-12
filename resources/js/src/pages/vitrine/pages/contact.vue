@@ -3,7 +3,7 @@
     import InputText from '../../../components/tools/InputText.vue';
     import AreaText from '../../../components/tools/AreaText.vue';
     import Modal from '../../../components/ModalComponent.vue';
-    import { reactive, ref } from 'vue';
+    import { reactive, ref, watch } from 'vue';
     import axios from 'axios';
     import { useRouter } from 'vue-router';
 
