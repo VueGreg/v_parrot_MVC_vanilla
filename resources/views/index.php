@@ -22,6 +22,8 @@
             echo "<script>var filename = '{$filename}';</script>";
             $hasRouter = $vue_info['hasRouter'];
             echo "<script>var hasRouter = '{$hasRouter}';</script>";
+            $csrf_token = $vue_info['csrf_token'];
+            echo "<script>var csrf_token = '{$csrf_token}';</script>";
         ?>
         <script src="https://kit.fontawesome.com/a0d5f723cd.js" crossorigin="anonymous"></script>
     </body>

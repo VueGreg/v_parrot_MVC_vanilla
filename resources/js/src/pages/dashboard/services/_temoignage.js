@@ -1,37 +1,37 @@
 
 import { ref } from 'vue';
-import api from '../../../axios';
+import createApiWithCsrfToken from '../../../axios';
 
 export default function useTemoignage()
 {
     const responseData  = ref();
     const errors = ref();
+    const api = createApiWithCsrfToken();
 
-    const changeStatus = async(id) => {
-        await api.put('/dashboard/temoignage', id)
-        .then(response => {
-            console.log(response.data)
+    async function changeStatus(id) {
+        try {
+            const api = await createApiWithCsrfToken();
+            const response = await api.put('/dashboard/temoignage', id);
             responseData.value = response.data;
             if (response.data.error) {
                 console.log(response.data.error);
             }
-        })
-        .catch(e => {
-            console.error(e);
-        })
+        } catch (error) {
+            console.error(error);
+        }
     }
 
-    const deleteStatus = async(id) => {
-        await api.delete('/dashboard/temoignage', { params: { id: id } })
-        .then(response => {
+    async function deleteStatus(id) {
+        try {
+            const api = await createApiWithCsrfToken();
+            const response = await api.delete('/dashboard/temoignage', { params: { id: id } });
             responseData.value = response.data;
             if (response.data.error) {
                 console.log(response.data.error);
             }
-        })
-        .catch(e => {
-            console.error(e);
-        })
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     return {

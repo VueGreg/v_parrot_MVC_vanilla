@@ -21,21 +21,8 @@
         fantomeTop.value = -8;
       }
     };
-
-    const getCsrf = async() => {
-      await axios.get('/getcsrf')
-      .then(response => {
-        store.dispatch('updateCsrf', response.data.csrf_token);
-      })
-      .catch(e => {
-        console.error(e)
-      })
-    }
   
     onMounted(() => {
-      if (isConnect.value) {
-        getCsrf();
-      }
       window.addEventListener('scroll', handleScroll);
     });
   

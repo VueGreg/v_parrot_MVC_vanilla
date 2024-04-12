@@ -15,9 +15,6 @@ class Auth
                 session_start();
             }
 
-            $csrf = new CrossSiteRequestForgery();
-            $csrf->generateCSRFToken();
-
             $session_key = $_SESSION['user_token'];
             $utilisateurs = (new UtilisateursModel())->all();
 
