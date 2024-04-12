@@ -26,7 +26,6 @@ class Request
         $uri = $_SERVER["REQUEST_URI"] ?? '';
         $queryParams = $_GET;
         $postData = json_decode(file_get_contents('php://input'), true) ?: [];
-
         return new self($method, $uri, $queryParams, $postData);
     }
 

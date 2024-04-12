@@ -1,16 +1,39 @@
 <script setup>
 
     import LayoutView from '../../Layout/LayoutView.vue';
+    import useTemoignage from './services/_temoignage';
+    import { ref, reactive } from 'vue';
+    import Modal from '../../components/ModalComponent.vue';
 
     const props = defineProps({
         data: Object
     })
 
-    console.log(props.data)
+    const formData = reactive({
+        id: null,
+    })
+
+    const temoignagesData = ref(props.data);
+
+    const { deleteStatus, changeStatus, responseData, errors } = useTemoignage();
+
+    const supprimer = async(id) => {
+        await deleteStatus(id);
+        temoignagesData.value = responseData.value;
+    }
+
+    const change = async(id) => {
+        formData.id = id
+        await changeStatus(formData.id);
+        temoignagesData.value = responseData.value;
+    }
 
 </script>
 
 <template>
+    <Modal :show="errors" @close="errors = null">
+        {{ errors }}
+    </Modal>
     <LayoutView>
         <template #content>
             <main class="row">
@@ -54,7 +77,7 @@
                     <h2 class="col-10 col-sm-7 col-md-10">{{ data.count }} TEMOIGNAGE PUBLIE</h2>
                     <div class="testimony">
                         <TransitionGroup name="slide-fade">
-                            <div class="testimony__card col-8 col-sm-7 col-md-3" v-for="temoignage in data.temoignages_publie" :key="temoignage.id" @click="goWithdraw(temoignage.id)">
+                            <div class="testimony__card col-8 col-sm-7 col-md-3" v-for="temoignage in temoignagesData.temoignages_publie" :key="temoignage.id" @click="change(temoignage.id)">
                                 <div class="testimony__card-person">
                                     <img src="http://gregory-wolff.com/images/anonymous1_avatars_grey_circles.jpg" alt="">
                                     <div class="delete-item">
@@ -111,7 +134,7 @@
                             <div class="table__header col-md-10 col-lg-8">
                                 <div class="table__header-head">
                                     <h5>Nouveau témoignages clients</h5>
-                                    <h5>{{ data.count_attente }}</h5>
+                                    <h5>{{ temoignagesData.count_attente }}</h5>
                                 </div>
                                 <div class="table__header-cat">
                                     <h6 class="elem elem1">Nom</h6>
@@ -123,7 +146,7 @@
                                 </div>
                             </div>
                             <TransitionGroup name="slide-fade">
-                            <div class="table__body col-md-10 col-lg-8" v-for="showAwaitTestimony in data.temoignages_attente" :key="showAwaitTestimony.id" @click="showOptions(showAwaitTestimony.id)">
+                            <div class="table__body col-md-10 col-lg-8" v-for="showAwaitTestimony in temoignagesData.temoignages_attente" :key="showAwaitTestimony.id">
                                 <div class="table__body-elem">
                                     <span class="elem elem1">{{ showAwaitTestimony.nom }}</span>
                                     <span class="elem elem2">{{ showAwaitTestimony.prenom }}</span>
@@ -134,11 +157,11 @@
                                     <span class="elem elem5">{{ showAwaitTestimony.commentaire }}</span>
                                 
                                     <span class="elem elem6">
-                                        <div class="elem-btn" @click="goAccept(showAwaitTestimony.id)">
+                                        <div class="elem-btn" @click="change(showAwaitTestimony.id)">
                                             <i class="fa-regular fa-circle-check"></i>
                                             <p>Publier sur le site</p>
                                         </div>
-                                        <div class="elem-btn" @click="goRefuse(showAwaitTestimony.id)">
+                                        <div class="elem-btn" @click="supprimer(showAwaitTestimony.id)">
                                             <i class="fa-regular fa-circle-xmark"></i>
                                             <p>Supprimer</p>
                                         </div>

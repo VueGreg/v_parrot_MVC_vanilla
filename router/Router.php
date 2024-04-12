@@ -12,7 +12,6 @@ class Router
     private $request;
     private $routes;
     private $auth;
-    private $access;
 
     public function __construct()
     {
@@ -41,7 +40,7 @@ class Router
             if ($this->auth->verify($path)) {
                 if (class_exists($className) && method_exists($className, $method)) {
                     $class = new $className();
-                    $params = ($this->request->getMethod() == 'POST' && $this->request->getPost() !== null) ? $this->request : $this->request->getParams();
+                    $params = ($this->request->getMethod() != 'GET' && $this->request->getPost() !== null) ? $this->request : $this->request->getParams();
                     return call_user_func_array([$class, $method], [$params ?? null]);
                 }
             }
@@ -53,7 +52,7 @@ class Router
 
     public function get(string $path, array $action): self
     {
-        if ($this->request->getMethod() == 'GET') {
+        if ($this->request->getMethod() == 'GET' || $this->request->getMethod() == 'DELETE') {
             $this->routes[$path] = ['action' => $action];
         }
         return $this;
@@ -66,7 +65,7 @@ class Router
 
     public function post(string $path, array $action): self
     {
-        if ($this->request->getMethod() == 'POST' && $this->request->getPost()) {
+        if ($this->request->getMethod() !== 'GET' && $this->request->getPost()) {
 
             $requestName = 'Request\Request' . explode('Controller', explode('\\', $action[0])[1])[0];
             $this->routes[$path] = ['action' => $action, 'request' => $requestName];
@@ -75,14 +74,22 @@ class Router
         return $this;
     }
 
-    public function put(string $route, array $controller, array $params = [])
+    public function put(string $path, array $action): self
     {
+        if ($this->request->getMethod() === 'PUT' && $this->request->getPost()) {
+            return $this->post($path, $action);
+        }
 
+        return $this;
     }
 
-    public function delete(string $route, array $controller, array $params = [])
+    public function delete(string $path, array $action): self
     {
-
+        if ($this->request->getMethod() === 'DELETE' && $this->request->getParams()) {
+            return $this->get($path, $action);
+        }
+    
+        return $this;
     }
 
     public function auth()

@@ -136,6 +136,21 @@ class QueryBuilder
         throw new CreateException("La modification à échoué en raison d'une erreur de validation.");
     }
 
+    public function delete(int $id): bool
+    {
+        $this->query = "DELETE FROM {$this->tableName} WHERE id = :id";
+
+        $statement = $this->pdo->prepare($this->getQuery());
+        $statement->bindValue(":id", $id);
+
+        if ($statement->execute()) {
+            $this->query = '';
+            return true;
+        }
+
+        throw new CreateException("La suppression à échoué en raison d'une erreur de validation.");
+    }
+
     public function getQuery(): string
     {
         return $this->query;

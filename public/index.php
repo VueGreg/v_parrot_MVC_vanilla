@@ -17,7 +17,11 @@ $router->post('/connexion', ["Controllers\UtilisateurController", 'login']);
 
 //Route Dashboard 
 $router->get('/dashboard/parametre', ["Controllers\ParametreController", 'index'])->auth();
+
 $router->get('/dashboard/temoignage', ["Controllers\TemoignageController", 'index'])->auth();
+$router->put('/dashboard/temoignage', ["Controllers\TemoignageController", 'update'])->auth();
+$router->delete('/dashboard/temoignage', ["Controllers\TemoignageController", 'delete'])->auth();
+
 $router->get('/dashboard/employe', ["Controllers\EmployeController", 'index'])->auth();
 $router->get('/dashboard/message', ["Controllers\MessageController", 'index'])->auth();
 
