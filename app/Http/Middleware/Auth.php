@@ -9,11 +9,14 @@ class Auth
 {
     public function verify($path): bool
     {
-        if ($path === '/dashboard/parametre' || $path === '/dashboard/temoignage' || $path === 'dashboard/employe' || $path === 'dashboard/message') {
+        if ($path === '/dashboard/parametre' || $path === '/dashboard/temoignage' || $path === 'dashboard/employe' || $path === 'dashboard/message' || $path === 'getcsrf') {
 
             if (session_status() !== PHP_SESSION_ACTIVE) {
                 session_start();
             }
+
+            $csrf = new CrossSiteRequestForgery();
+            $csrf->generateCSRFToken();
 
             $session_key = $_SESSION['user_token'];
             $utilisateurs = (new UtilisateursModel())->all();

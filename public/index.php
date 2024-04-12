@@ -29,5 +29,8 @@ $router->get('/dashboard/message', ["Controllers\MessageController", 'index'])->
 $router->get('/filtre', ["Controllers\FilterAPIController", "getAll"]);
 $router->get('/filtre/params', ["Controllers\FilterAPIController", "filter"]);
 
+//Route _csrf
+$router->get('/getcsrf', ["Controllers\_csrfController", 'index'])->auth();
+
 //Call route
 return $router->dispatch();

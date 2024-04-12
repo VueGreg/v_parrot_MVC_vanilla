@@ -5,6 +5,7 @@ namespace Router;
 use Utils\Request;
 use Controllers\_404Controller;
 use Middleware\Auth;
+use Middleware\CrossSiteRequestForgery;
 
 class Router
 {
@@ -12,6 +13,7 @@ class Router
     private $request;
     private $routes;
     private $auth;
+    private $csrf;
 
     public function __construct()
     {
@@ -32,7 +34,11 @@ class Router
             $requestInstance = $routeData['request'] ?? null;
 
             if (isset($requestInstance) && class_exists($requestInstance)) {
-                $this->request = new $requestInstance($this->request->getMethod(), $this->request->getUri(), $this->request->getParams(), $this->request->getPost());
+                $this->request = new $requestInstance(  $this->request->getMethod(), 
+                                                        $this->request->getUri(), 
+                                                        $this->request->getParams(), 
+                                                        $this->request->getPost(), 
+                                                        $this->request->getAuthorization());
             }
 
             [$className, $method] = $action;
@@ -65,7 +71,9 @@ class Router
 
     public function post(string $path, array $action): self
     {
-        if ($this->request->getMethod() !== 'GET' && $this->request->getPost()) {
+        $this->csrf = new CrossSiteRequestForgery();
+
+        if ($this->request->getMethod() !== 'GET' && $this->request->getPost() && $this->csrf->validateCSRFToken($this->request->getAuthorization())) {
 
             $requestName = 'Request\Request' . explode('Controller', explode('\\', $action[0])[1])[0];
             $this->routes[$path] = ['action' => $action, 'request' => $requestName];
@@ -85,7 +93,9 @@ class Router
 
     public function delete(string $path, array $action): self
     {
-        if ($this->request->getMethod() === 'DELETE' && $this->request->getParams()) {
+        $this->csrf = new CrossSiteRequestForgery();
+
+        if ($this->request->getMethod() === 'DELETE' && $this->request->getParams() && $this->csrf->validateCSRFToken($this->request->getAuthorization())) {
             return $this->get($path, $action);
         }
     

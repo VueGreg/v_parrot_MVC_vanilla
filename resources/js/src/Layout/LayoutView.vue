@@ -6,6 +6,7 @@
     import FooterComponent from '../components/FooterComponent.vue';
     import { useStore } from 'vuex';
     import { computed, ref, onMounted, onUnmounted } from 'vue';
+    import axios from 'axios';
   
     const store = useStore();
     const data = computed(() => store.getters.layoutData);
@@ -13,15 +14,28 @@
     const fantomeTop = ref(0);
 
     const handleScroll = () => {
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    if (scrollTop < 500) {
-      fantomeTop.value = 0;
-    } else {
-      fantomeTop.value = -8;
+      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      if (scrollTop < 500) {
+        fantomeTop.value = 0;
+      } else {
+        fantomeTop.value = -8;
+      }
+    };
+
+    const getCsrf = async() => {
+      await axios.get('/getcsrf')
+      .then(response => {
+        store.dispatch('updateCsrf', response.data.csrf_token);
+      })
+      .catch(e => {
+        console.error(e)
+      })
     }
-  };
   
     onMounted(() => {
+      if (isConnect.value) {
+        getCsrf();
+      }
       window.addEventListener('scroll', handleScroll);
     });
   

@@ -4,7 +4,8 @@ export default createStore({
   state() {
     return {
       layoutData: null,
-      isConnect: false
+      isConnect: false,
+      _csrf: null,
     };
   },
   mutations: {
@@ -15,6 +16,10 @@ export default createStore({
     setIsConnect(state, isConnected) {
       state.isConnect = isConnected;
       localStorage.setItem('isConnect', isConnected);
+    },
+    setCsrf(state, crossSite) {
+      state._csrf = crossSite;
+      localStorage.setItem('_csrf', crossSite);
     }
   },
   actions: {
@@ -23,6 +28,9 @@ export default createStore({
     },
     updateIsConnect({ commit }, isConnected) {
       commit('setIsConnect', isConnected);
+    },
+    updateCsrf({ commit }, crossSite) {
+      commit('setCsrf', crossSite);
     }
   },
   getters: {
@@ -32,6 +40,15 @@ export default createStore({
     isConnect(state) {
       const storedValue = localStorage.getItem('isConnect');
       return storedValue ? JSON.parse(storedValue) : false;
+    },
+    _csrf(state) {
+      const storedValue = localStorage.getItem('_csrf');
+      try {
+        return storedValue ? storedValue : null;
+      } catch (error) {
+        console.error("Erreur lors de l'analyse du jeton CSRF:", error);
+        return null;
+      }
     }
   }
 });

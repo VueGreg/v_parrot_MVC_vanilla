@@ -1,6 +1,6 @@
 
 import { ref } from 'vue';
-import axios from 'axios';
+import api from '../../../axios';
 
 export default function useTemoignage()
 {
@@ -8,8 +8,9 @@ export default function useTemoignage()
     const errors = ref();
 
     const changeStatus = async(id) => {
-        await axios.put('http://parrotpoo.test/dashboard/temoignage', id)
+        await api.put('/dashboard/temoignage', id)
         .then(response => {
+            console.log(response.data)
             responseData.value = response.data;
             if (response.data.error) {
                 console.log(response.data.error);
@@ -21,7 +22,7 @@ export default function useTemoignage()
     }
 
     const deleteStatus = async(id) => {
-        await axios.delete('http://parrotpoo.test/dashboard/temoignage', { params: { id: id } })
+        await api.delete('/dashboard/temoignage', { params: { id: id } })
         .then(response => {
             responseData.value = response.data;
             if (response.data.error) {

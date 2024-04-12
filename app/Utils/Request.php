@@ -10,14 +10,16 @@ class Request
     private $params = [];
     private $post = [];
     private $className;
+    private $authorization;
 
-    public function __construct($method, $uri, $queryParams, $postData)
+    public function __construct($method, $uri, $queryParams, $postData, $authorizationHeader)
     {
         $this->method = $method;
         $this->uri = $uri;
         $this->params = $queryParams;
         $this->post = $postData;
         $this->className = explode('\\', get_called_class());
+        $this->authorization = $authorizationHeader;
     }
 
     public static function createFromGlobals()
@@ -26,7 +28,8 @@ class Request
         $uri = $_SERVER["REQUEST_URI"] ?? '';
         $queryParams = $_GET;
         $postData = json_decode(file_get_contents('php://input'), true) ?: [];
-        return new self($method, $uri, $queryParams, $postData);
+        $authorizationHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
+        return new self($method, $uri, $queryParams, $postData, $authorizationHeader);
     }
 
     public function getMethod() 
@@ -56,6 +59,11 @@ class Request
     public function getClassName()
     {
         return $this->className;
+    }
+
+    public function getAuthorization()
+    {
+        return $this->authorization;
     }
 
     //Rules supported
