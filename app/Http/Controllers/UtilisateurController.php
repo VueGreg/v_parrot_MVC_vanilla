@@ -44,8 +44,8 @@ class UtilisateurController extends Controller
                     $_SESSION['user_name'] = $utilisateur->nom;
                     $_SESSION['user_surname'] = $utilisateur->prenom;
                     $_SESSION['user_token'] = $token;
-                    $_SESSION['user_permission'] = $utilisateur->id_permissions;
-                    $validate['url'] = 'http://parrotpoo.test/dashboard/parametre';
+                    $_SESSION['user_role'] = $utilisateur->role;
+                    $validate['url'] = 'http://parrotpoo.test/dashboard/message';
                     $validate['isConnect'] = 'connected';
                     echo json_encode($validate);
                     die;

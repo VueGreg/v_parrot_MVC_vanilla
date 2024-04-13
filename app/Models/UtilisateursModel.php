@@ -7,5 +7,4 @@ use Utils\Model;
 
 class UtilisateursModel extends Model
 {
-
 }

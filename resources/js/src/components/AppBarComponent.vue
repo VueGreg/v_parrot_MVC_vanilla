@@ -1,17 +1,34 @@
 <script setup>
 
+    import { onMounted, ref } from 'vue';
     import Link from './LinkPOO.vue';
+    import axios from 'axios';
 
     const props = defineProps({
         isConnect: Boolean
     });
+
+    const path = ref([]);
+
+    const getPermission = async() => {
+        try {
+            const response = await axios.get('http://parrotpoo.test/permission')
+            path.value = response.data;
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    onMounted(async() => {
+        await getPermission();
+    })
 
 </script>
 
 <template>
     <nav class="row" v-if="isConnect">
         <div class="bar col-10 col-sm-8 m-auto">
-            <Link class="link" to="http://parrotpoo.test/dashboard/employe">
+            <Link class="link" to="http://parrotpoo.test/dashboard/employe" v-if="path.includes('/dashboard/employe')">
                 <div class="bar__btn">
                     <i class="fa-solid fa-users"></i>
                     <div class="bar__btn-indicator">
@@ -20,13 +37,13 @@
                     <h5 v-if="isConnect">EMPLOYES</h5>
                 </div>
             </Link>
-            <Link class="link" to="http://parrotpoo.test/dashboard/parametre">
+            <Link class="link" to="http://parrotpoo.test/dashboard/parametre" v-if="path.includes('/dashboard/parametre')">
                 <div class="bar__btn">
                     <i class="fa-solid fa-gear"></i>
                     <h5 v-if="isConnect">INFORMATIONS ENTREPRISE</h5>
                 </div>
             </Link>
-            <Link class="link" to="http://parrotpoo.test/dashboard/message">
+            <Link class="link" to="http://parrotpoo.test/dashboard/message" v-if="path.includes('/dashboard/message')">
                 <div class="bar__btn">
                     <i class="fa-solid fa-message"></i>
                     <div class="bar__btn-indicator">
@@ -44,7 +61,7 @@
                     <h5 v-if="isConnect">PARC AUTOMOBILE</h5>
                 </div>
             </RouterLink>
-            <Link class="link" to="http://parrotpoo.test/dashboard/temoignage">
+            <Link class="link" to="http://parrotpoo.test/dashboard/temoignage" v-if="path.includes('/dashboard/temoignage')">
                 <div class="bar__btn"> 
                     <i class="fa-regular fa-comment-dots"></i>
                     <div class="bar__btn-indicator">

@@ -15,6 +15,7 @@ $router->get('/connexion', ["Controllers\UtilisateurController", 'index']);
 $router->get('/deconnexion', ["Controllers\UtilisateurController", 'logout']);
 $router->post('/connexion', ["Controllers\UtilisateurController", 'login']);
 $router->get('/isconnect', ["Controllers\UtilisateurController", 'isConnect']);
+$router->get('/permission', ["Controllers\PermissionController", 'checkPermission']);
 
 //Route Dashboard 
 $router->get('/dashboard/parametre', ["Controllers\ParametreController", 'index'])->auth();

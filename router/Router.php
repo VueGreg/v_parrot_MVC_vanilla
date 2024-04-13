@@ -6,6 +6,7 @@ use Utils\Request;
 use Controllers\_404Controller;
 use Middleware\Auth;
 use Middleware\CrossSiteRequestForgery;
+use Middleware\Permission;
 
 class Router
 {
@@ -14,11 +15,13 @@ class Router
     private $routes = [];
     private $auth;
     private $csrf;
+    private $permission;
 
     public function __construct()
     {
         $this->request = Request::createFromGlobals();
         $this->auth = new Auth();
+        $this->permission = new Permission();
     }
 
     protected function setRoute(Request $request)
@@ -38,7 +41,7 @@ class Router
 
             [$className, $method] = $action;
             
-            if ($this->auth->verify($path)) {
+            if ($this->auth->verify($path) && $this->permission->validatePermissions($path)) {
                 if (class_exists($className) && method_exists($className, $method)) {
                     $class = new $className();
                     $params = ($this->request->getMethod() != 'GET' && $this->request->getPost() !== null) ? $this->request : $this->request->getParams();
