@@ -3,6 +3,7 @@ import Acceuil from '../pages/acceuil.vue';
 import Reparations from '../pages/reparations.vue';
 import Vehicules from '../pages/vehicules.vue';
 import Contact from '../pages/contact.vue';
+import Vehicule from '../pages/vehicule.vue';
 
 const routes = [
   {
@@ -24,6 +25,11 @@ const routes = [
     path: '/contact',
     name: 'contact',
     component: Contact
+  },
+  {
+    path: '/vehicule/:slug',
+    name: 'vehicule',
+    component: Vehicule
   }
 ];
 

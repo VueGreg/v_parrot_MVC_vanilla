@@ -13,6 +13,7 @@ class QueryBuilder
     private $pdo;
     private $whereClause;
     private $oneValue = false;
+    private $limit;
 
     public function __construct(string $tableName, PDO $pdo)
     {
@@ -60,6 +61,12 @@ class QueryBuilder
     public function join(string $table, string $foreign_key, string $operator, string $other_key): self
     {
         $this->query .= " INNER JOIN $table ON $foreign_key $operator $other_key";
+        return $this;
+    }
+
+    public function limit(int $number_limit): self
+    {
+        $this->limit = " LIMIT {$number_limit}";
         return $this;
     }
 
@@ -161,11 +168,21 @@ class QueryBuilder
         return $this->parameters;
     }
 
+    public function queryManual(string $query): self
+    {
+        $this->query = $query;
+        return $this;
+    }
+
     public function get(): mixed
     {
         if (!empty($this->whereClause) && is_array($this->whereClause)) {
             $whereConditions = implode(" AND ", $this->whereClause);
             $this->query .= " WHERE $whereConditions";
+        }
+
+        if ($this->limit) {
+            $this->query .= $this->limit;
         }
         
         $statement = $this->pdo->prepare($this->getQuery());
@@ -173,15 +190,16 @@ class QueryBuilder
             $statement->bindValue(":$column", $value);
         }
 
-        // var_dump($this->query);
-        // die;
         if ($statement->execute()) {
             $this->query = '';
+            $this->whereClause = null;
+            $this->limit = '';
+            $this->parameters = [];
         }
 
         if ($this->oneValue) {
-            return $statement->fetch(PDO::FETCH_COLUMN);
             $this->oneValue = false;
+            return $statement->fetch(PDO::FETCH_COLUMN);
         }else return $statement->fetchAll(PDO::FETCH_ASSOC);
     }
 }

@@ -8,6 +8,7 @@ $router = new Router();
 
 // Route site vitrine
 $router->get('/', ["Controllers\HomeController", "index"]);
+$router->get('/vehicule', ["Controllers\AnnonceController", "show"]);
 $router->post('/message', ["Controllers\MessageController", 'store']);
 
 //Login

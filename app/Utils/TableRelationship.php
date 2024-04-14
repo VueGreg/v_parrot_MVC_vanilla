@@ -2,6 +2,7 @@
 
 namespace Utils;
 
+use Dotenv\Parser\Value;
 use PDO;
 
 class TableRelationship
@@ -80,6 +81,8 @@ class TableRelationship
 
     public function hasMany(string $tableMany, string $galleryTable, bool $chain = false, int $limit = null): array|self
     {
+        $results = [];
+
         if (empty($this->resultChain)) {
             $this->has();
         }
@@ -103,10 +106,11 @@ class TableRelationship
             $results[$key][$tableMany] = $statement_many->fetchAll(PDO::FETCH_ASSOC);
         }
 
+        $this->resultChain = $results;
+
         if ($chain) {
             return $this;
         } else  {
-            $this->resultChain = $results;
             return $this->resultChain;
         }
     }

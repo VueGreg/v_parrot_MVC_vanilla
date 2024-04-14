@@ -4,6 +4,7 @@
     import FilterFormComponent from '../../../components/FilterFormComponent.vue';
     import axios from 'axios';
     import { ref, onMounted, watch } from 'vue';
+    import { RouterLink } from 'vue-router';
 
     const annonces = ref()
 
@@ -52,8 +53,8 @@
         <FilterFormComponent @update:formData="searchCar"/>
 
         <div class="container__cards col-9 col-sm-6 col-lg-8">
-            <div class="cards" v-for="annonce in annonces" :key="annonce.numero_annonce">
-                <LinkPOO class="link" :to="`/dashboard/vehicule/${annonce.numero_annonce}`">
+            <div class="cards" v-for="annonce in annonces" :key="annonce.id">
+                <RouterLink class="link" :to="`/vehicule/${annonce.slug}`">
                     <div class="cards__image">
                         <img :src=annonce.images[0].adresse>
                     </div>
@@ -72,7 +73,7 @@
                             <h3>{{ annonce.prix }}€</h3>
                         </div>
                     </div>
-                </LinkPOO>
+                </RouterLink>
             </div>
         </div>
     </main>

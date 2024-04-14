@@ -14,7 +14,7 @@
 
 <template>
 
-    <LastVehiculeComponent/>
+    <LastVehiculeComponent :data="data.dernier_vehicules"/>
     <ExpertiseComponent/>
     <TemoignageComponent :data="data.temoignages"/>
     <AvisComponent/>

@@ -1,13 +1,18 @@
 <script setup>
 
+    defineProps({
+        data: Object
+    })
+
+
 </script>
 
 <template>
     <section class="row">
         <h2 class="col-10 col-sm-7 col-md-8 col-lg-10">NOS DERNIERS VEHICULES INTRODUIT DANS LE PARC</h2>
         <div class="container-card m-auto col-sm-10">
-            <div class="cards col-8 col-lg-6 col-xl-3" v-for="annonce in lastAnnonces" :key="annonce.numero_annonce">
-                <RouterLink class="link" active-class="active" :to="`/annonces/${annonce.numero_annonce}`">
+            <div class="cards col-8 col-lg-6 col-xl-3" v-for="annonce in data" :key="annonce.id">
+                <RouterLink class="link" active-class="active" :to="`/vehicule/${annonce.slug}`">
                 <div class="cards__image">
                     <img :src=annonce.photo>
                 </div>
@@ -30,7 +35,7 @@
             </div>
         </div>
     </section>
-    <button><RouterLink class="link" active-class="active" to="/annonces">Afficher tous les véhicules</RouterLink></button>
+    <button><RouterLink class="link" active-class="active" to="/vehicules">Afficher tous les véhicules</RouterLink></button>
 </template>
 
 <style lang="scss" scoped>

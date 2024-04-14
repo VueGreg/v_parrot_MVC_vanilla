@@ -32,6 +32,17 @@ class HomeController extends Controller
 
         $annonces = new AnnoncesModel();
         $json['nombre_vehicules'] = $annonces->query()->count()->where("status", "=" , 0)->get();
+        $json['dernier_vehicules'] = $annonces->query()
+                                    ->queryManual(" SELECT annonces.*, images.adresse AS photo, vehicules.modele, vehicules.marque
+                                                    FROM annonces
+                                                    INNER JOIN (
+                                                        SELECT id_annonces, MIN(id_images) AS id_images
+                                                        FROM galeries
+                                                        GROUP BY id_annonces
+                                                    ) AS galeries ON annonces.id = galeries.id_annonces
+                                                    INNER JOIN images ON galeries.id_images = images.id
+                                                    INNER JOIN vehicules ON vehicules.id = annonces.id_vehicules
+                                                    LIMIT 3")->get();
 
         $reparations = new ReparationsModel();
         $json['prestations'] = $reparations->all();

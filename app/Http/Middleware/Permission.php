@@ -2,8 +2,6 @@
 
 namespace Middleware;
 
-use Models\UtilisateursModel;
-
 class Permission
 {
     private function getPermissionsRole(): Array
@@ -14,6 +12,7 @@ class Permission
                     "/permission",
                     "/deconnexion",
                     "/isconnect",
+                    "/vehicule",
                     "/dashboard/employe",
                     "/dashboard/message",
                     "/dashboard/parametre",
@@ -24,6 +23,7 @@ class Permission
                     "/permission",
                     "/deconnexion",
                     "/isconnect",
+                    "/vehicule",
                     "/dashboard/message",
                     "/dashboard/temoignage"
                 ],
@@ -32,6 +32,7 @@ class Permission
                     "/permission",
                     "/deconnexion",
                     "/isconnect",
+                    "/vehicule",
                     "/permission",
                     "/dashboard/message"
                 ]
